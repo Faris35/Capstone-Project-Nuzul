@@ -99,7 +99,7 @@ with col2:
     # Filter data for only the top 10 brands
     top_brands_distribution = df[df['brand'].isin(top_brands_distribution)]
     st.markdown("### توزيع الأسعار لأغلى عشر ماركات:")
-    st.bar_chart(top_brands_distribution)
+    st.bar_chart(top_brands_distribution['price_usd'])
 
 # # Correlation between Price and rest of the features and put a drop down menu to select the brand
 # # Features to analyze
