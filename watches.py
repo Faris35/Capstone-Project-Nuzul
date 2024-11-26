@@ -83,13 +83,21 @@ st.markdown("""
 top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
 # st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
 # st.bar_chart(top_brands)
-st.markdown("""
-### تدري وش الماركات اللي تتصدر أغلى الساعات بالعالم؟
-**ريتشارد ميل** متربعة على القمة بأسعارها العالية واللي تعكس ندرتها وفخامتها، تليها **باتيك فيليب** و**أوديمار بيغيه** كخيارات راقية ومميزة.  
-أما **رولكس**، فهي تقدم جودة عالية بفخامة وسعر أقل شوي مقارنة بالباقي.
-""")
-st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
-st.bar_chart(top_brands_all)
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
+    ### تدري وش الماركات اللي تتصدر أغلى الساعات بالعالم؟
+    **ريتشارد ميل** متربعة على القمة بأسعارها العالية واللي تعكس ندرتها وفخامتها، تليها **باتيك فيليب** و**أوديمار بيغيه** كخيارات راقية ومميزة.  
+    أما **رولكس**، فهي تقدم جودة عالية بفخامة وسعر أقل شوي مقارنة بالباقي.
+    """)
+    st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
+    st.bar_chart(top_brands_all)
+
+with col2:
+    st.markdown("### أشهر الموديلات:")
+    top_models_all = df.groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
+    st.bar_chart(top_models_all)
 
 # # Correlation between Price and rest of the features and put a drop down menu to select the brand
 # # Features to analyze
@@ -134,6 +142,17 @@ st.bar_chart(top_brands_all)
 ####################
 
 # size Trends
+
+st.markdown("""
+بعد دراسة البيانات وخصائص الساعات، وصلنا لاستنتاج بأن أغلب الساعات تتأثر بالتالي:
+1. الحجم
+2. سنة التصنيع
+3. الموديل
+4. نوع الحركة
+5. مادة السوار
+
+سنعرض الآن الرسوم البيانية للخصائص المذكورة ومدى تأثيرها على قيمة الساعات.
+""")
 
 st.markdown("### تحليل الأسعار حسب حجم الساعة:")
 size_prices = df.groupby('size_mm')['price_usd'].median()
