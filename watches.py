@@ -95,9 +95,9 @@ with col1:
     st.bar_chart(top_brands_all)
 
 with col2:
-    st.markdown("### أشهر الموديلات:")
-    top_models_all = df.groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
-    st.bar_chart(top_models_all)
+    st.markdown("### توزيع الأسعار لأغلى عشر ماركات:")
+    top_brands_distribution = df[df['brand'].isin(top_brands_all.index)]['brand'].value_counts()
+    st.bar_chart(top_brands_distribution)
 
 # # Correlation between Price and rest of the features and put a drop down menu to select the brand
 # # Features to analyze
