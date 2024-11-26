@@ -186,12 +186,12 @@ condition = st.selectbox("حالة الساعة", df[(df['brand'] == brand) & (d
 
 # Filter the DataFrame
 filtered_data = df[
-    (df['brand'].str.contains(brand, na=False)) &
-    (df['movement'].str.contains(movement, na=False)) &
-    (df['case_material'].str.contains(case_material, na=False)) &
-    (df['bracelet_material'].str.contains(bracelet_material, na=False)) &
-    (df['year_of_production'].astype(str).str.contains(year_of_production, na=False)) &
-    (df['condition'].str.contains(condition, na=False))
+    (df['brand'] == brand) &
+    (df['movement'] == movement) &
+    (df['case_material'] == case_material) &
+    (df['bracelet_material'] == bracelet_material) &
+    (df['year_of_production'] == year_of_production) &
+    (df['condition'] == condition)
 ]
 
 # Show the filtered DataFrame
