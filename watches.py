@@ -1,3 +1,4 @@
+# import libraries
 import streamlit as st
 from PIL import  Image
 import matplotlib as plt
@@ -12,7 +13,6 @@ body {
 }
 </style>
 """
-
 st.markdown(rtl_css, unsafe_allow_html=True)
 
 # Load data
@@ -33,6 +33,16 @@ st.markdown("""
 st.markdown("""
 في البداية، بنعرض توزيع أسعار الساعات لأفضل عشر ماركات فاخرة عشان تعرف كيف تختلف الأسعار حسب الماركة بشكل عام. 
 """)
+
+# Filter data based on condition
+condition = st.selectbox('اختر حالة الساعة', df['condition'].unique())
+filtered_df = df[df['condition'] == condition]
+
+# Calculate average prices for top 10 brands
+top_brands = filtered_df.groupby('brand')['price'].mean().sort_values(ascending=False).head(10)
+
+# Plot the data
+st.bar_chart(top_brands)
 
 st.markdown("""
 اضف الشارت توزيع الاسعار لأفضل عشر ماركات في السوق
