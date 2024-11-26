@@ -2,6 +2,8 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Inject CSS for RTL
 rtl_css = """
@@ -83,6 +85,14 @@ st.bar_chart(top_brands_all)
 st.markdown("### تحليل العلاقة بين الأسعار والمواصفات:")
 features = ['model','movement','case_material','bracelet_material','year_of_production','condition','sex','size_mm']
 
+selected_brand = st.selectbox("اختر الماركة", df['brand'].unique())
+brand_df = df[df['brand'] == selected_brand]
+
+correlation_matrix = brand_df[['price_usd', features]].corr()
+
+fig, ax = plt.subplots()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', ax=ax)
+st.pyplot(fig)
 # Yearly Trends
 st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
 yearly_prices = df.groupby('year_of_production')['price_usd'].mean()
