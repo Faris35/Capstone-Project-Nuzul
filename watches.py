@@ -39,7 +39,7 @@ condition = st.selectbox('اختر حالة الساعة', df['condition'].uniqu
 filtered_df = df[df['condition'] == condition]
 
 # Calculate average prices for top 10 brands
-top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
+top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(5)
 
 # Plot the data
 st.bar_chart(top_brands)
