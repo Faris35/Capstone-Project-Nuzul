@@ -163,9 +163,21 @@ st.markdown("""
 سنعرض الآن الرسوم البيانية للخصائص المذكورة ومدى تأثيرها على قيمة الساعات.
 """)
 # Condition Analysis
-st.markdown("### تحليل الأسعار حسب حالة الساعة:")
-condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
-st.bar_chart(condition_prices)
+
+st.markdown("""
+### تحليل الأسعار حسب حالة الساعة:
+- **غير مستخدمة (Unworn):** تتصدر القائمة، وهذا يعكس ندرة توفرها في السوق والطلب العالي عليها، مما أدى إلى ارتفاع أسعارها.  
+- **الجديدة (New):** تأتي بعدها كخيار قوي، مما يدل على أن الساعات بحالة المصنع ما زالت مطلوبة.  
+- **حالة جيدة (Good) وجيدة جدًا (Very Good):** تشير إلى أن الساعات المستخدمة لا تزال جذابة للمشترين، خصوصًا الباحثين عن الجودة بسعر أقل.
+""")
+# Convert the frequency data to percentages for better visualization in a pie chart
+condition_prices = df['condition'].value_counts()
+condition_percentages = condition_prices / condition_prices.sum() * 100
+
+# Create the pie chart
+st.markdown("### توزيع الأسعار حسب حالة الساعة:")
+st.pyplot(condition_percentages.plot.pie(
+    autopct='%1.1f%%', labels=condition_percentages.index, figsize=(6, 6), legend=True).figure)
 
 
 # Size Analysis
