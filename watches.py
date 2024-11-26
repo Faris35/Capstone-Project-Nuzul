@@ -113,6 +113,7 @@ case_material_prices = df.groupby('case_material')['price_usd'].mean()
 st.bar_chart(case_material_prices)
 
 # Conclusion and Recommendations
+# TODO - Rewrite the recommendations
 st.subheader("توصياتنا")
 st.markdown("""
 بناءً على تحليلنا، هذه أهم النصائح:
@@ -121,12 +122,3 @@ st.markdown("""
 3. اهتم بحالة الساعة، الجديدة غالباً تحتفظ بقيمتها بشكل أفضل.
 4. تابع السوق باستمرار وتعلم من الموديلات اللي نجحت.
 """)
-
-# Final Interactive Section
-st.subheader("نبي نسمع منك!")
-st.markdown("""
-وش رأيك في تحليلنا؟ هل فيه شيء إضافي تحب نستكشفه؟ اكتب لنا اقتراحاتك أو استفساراتك.
-""")
-user_feedback = st.text_area("اكتب تعليقك هنا:")
-if st.button("إرسال"):
-    st.success("شكراً لك! بنراجع تعليقك وناخذ اقتراحاتك بعين الاعتبار.")
