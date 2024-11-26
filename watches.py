@@ -176,13 +176,13 @@ st.markdown("""
 # TODO - Add section for the user to input features and get the df of the watches that match the features
 # we will show him the models that match his features and the price of each model
 # User Input
-st.sidebar.header("اختر مواصفات الساعة:")
-brand = st.sidebar.selectbox("البراند", df['brand'].unique())
-movement = st.sidebar.selectbox("نوع الحركة", df[df['brand'] == brand]['movement'].unique())
-case_material = st.sidebar.selectbox("مادة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement)]['case_material'].unique())
-bracelet_material = st.sidebar.selectbox("مادة السوار", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material)]['bracelet_material'].unique())
-year_of_production = st.sidebar.selectbox("سنة التصنيع", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material)]['year_of_production'].unique())
-condition = st.sidebar.selectbox("حالة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material) & (df['year_of_production'] == year_of_production)]['condition'].unique())
+st.header("اختر مواصفات الساعة:")
+brand = st.selectbox("البراند", df['brand'].unique())
+movement = st.selectbox("نوع الحركة", df[df['brand'] == brand]['movement'].unique())
+case_material = st.selectbox("مادة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement)]['case_material'].unique())
+bracelet_material = st.selectbox("مادة السوار", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material)]['bracelet_material'].unique())
+year_of_production = st.selectbox("سنة التصنيع", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material)]['year_of_production'].unique())
+condition = st.selectbox("حالة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material) & (df['year_of_production'] == year_of_production)]['condition'].unique())
 
 # Filter the DataFrame
 filtered_data = df[
