@@ -162,7 +162,13 @@ st.markdown("""
 
 سنعرض الآن الرسوم البيانية للخصائص المذكورة ومدى تأثيرها على قيمة الساعات.
 """)
+# Condition Analysis
+st.markdown("### تحليل الأسعار حسب حالة الساعة:")
+condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
+st.bar_chart(condition_prices)
 
+
+# Size Analysis
 st.markdown("### تحليل الأسعار حسب حجم الساعة:")
 size_prices = df.groupby('size_mm')['price_usd'].median()
 st.line_chart(size_prices)
