@@ -5,6 +5,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
+import plotly.express as px
 
 st.image("zeina.png", width=120)
 
