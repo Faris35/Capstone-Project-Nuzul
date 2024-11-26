@@ -3,10 +3,24 @@ from PIL import  Image
 import matplotlib as plt
 import pandas as pd
 
+# Inject CSS for RTL
+rtl_css = """
+<style>
+body {
+    direction: rtl;
+    text-align: right;
+}
+</style>
+"""
 
+st.markdown(rtl_css, unsafe_allow_html=True)
+
+# Load data
 df = pd.read_csv('Final_version2_all_watches.csv')
 
+# Title
 st.title('ساعتك مو للزينة بس تقدر تستثمر فيها، خلها زينة وخزينة!')
+
 
 st.markdown("""
 في الوقت الحالي، الساعات الفاخرة ما صارت مجرد أداة نعرف فيها الوقت لكنها صارت استثمار ذكي يحتفظ بقيمته ويزيد مع الوقت، مثل الذهب والعقارات.
@@ -14,8 +28,6 @@ st.markdown("""
 إذا كنت ناوي تدخل هذا المجال، أهم شيء أنك تركز على فهم السوق، تعرف الموديلات النادرة اللي عليها طلب، وتتابع الماركات اللي تحافظ على قيمتها أو تزيد. 
 **وهنا يجي دورنا،** لأننا درسنا لك السوق بعناية وراح نوفر لك أهم التفاصيل والجوانب اللي تحتاج تعرفها، عشان تدخل هذا العالم بثقة وتحقق أفضل النتائج.
 """)
-
-
 
 
 st.markdown("""
