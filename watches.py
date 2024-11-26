@@ -79,7 +79,7 @@ st.markdown("""
 top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
 # st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
 # st.bar_chart(top_brands)
-st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
+st.markdown("### أسعار أغلى 10 ماركات:")
 st.bar_chart(top_brands_all)
 
 # Correlation between Price and rest of the features and put a drop down menu to select the brand
@@ -133,13 +133,13 @@ st.line_chart(brand_yearly_prices)
 # TODO - Add more insights and visualizations 
 st.subheader("نقاط إضافية مهمة")
 st.markdown("""
-- متوسط الأسعار يختلف بين الساعات الرجالية والنسائية بشكل ملحوظ.
+- الأسعار يختلف بين الساعات الرجالية والنسائية بشكل ملحوظ.
 - مادة السوار (جلد، معدن، سيراميك) ممكن تؤثر على السعر.
 - حالة الساعة (جديدة، مستعملة) لها تأثير مباشر على قيمتها.
 """)
 
 # Gender and Price
-st.markdown("### متوسط الأسعار حسب الجنس:")
+st.markdown("### الأسعار حسب الجنس:")
 gender_prices = brand_df.groupby('sex')['price_usd'].median()
 st.bar_chart(gender_prices)
 
