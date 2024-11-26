@@ -124,9 +124,10 @@ st.pyplot(fig)
 
 
 # Yearly Trends
-st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
-yearly_prices = df.groupby('year_of_production')['price_usd'].mean()
-st.line_chart(yearly_prices)
+st.markdown(f"### تحليل الأسعار للماركة {selected_brand} حسب سنوات التصنيع:")
+brand_yearly_prices = brand_df.groupby('year_of_production')['price_usd'].median()
+st.line_chart(brand_yearly_prices)
+
 
 # Additional Insights
 # TODO - Add more insights and visualizations 
@@ -139,17 +140,17 @@ st.markdown("""
 
 # Gender and Price
 st.markdown("### متوسط الأسعار حسب الجنس:")
-gender_prices = df.groupby('sex')['price_usd'].mean()
+gender_prices = brand_df.groupby('sex')['price_usd'].median()
 st.bar_chart(gender_prices)
 
 # Bracelet Material Impact
 st.markdown("### تأثير مادة السوار على الأسعار:")
-bracelet_prices = df.groupby('bracelet_material')['price_usd'].mean()
+bracelet_prices = brand_df.groupby('bracelet_material')['price_usd'].median()
 st.bar_chart(bracelet_prices)
 
 # Case Material Impact
 st.markdown("### تأثير مادة الساعة على الأسعار:")
-case_material_prices = df.groupby('case_material')['price_usd'].mean()
+case_material_prices = brand_df.groupby('case_material')['price_usd'].median()
 st.bar_chart(case_material_prices)
 
 # Conclusion and Recommendations
