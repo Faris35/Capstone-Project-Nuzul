@@ -173,6 +173,31 @@ st.markdown("""
 - حالة الساعة (جديدة، مستعملة) لها تأثير مباشر على قيمتها.
 """)
 
+# TODO - Add section for the user to input features and get the df of the watches that match the features
+# we will show him the models that match his features and the price of each model
+# User Input
+st.sidebar.header("اختر مواصفات الساعة:")
+brand = st.sidebar.selectbox("البراند", df['brand'].unique())
+movement = st.sidebar.selectbox("نوع الحركة", df[df['brand'] == brand]['movement'].unique())
+case_material = st.sidebar.selectbox("مادة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement)]['case_material'].unique())
+bracelet_material = st.sidebar.selectbox("مادة السوار", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material)]['bracelet_material'].unique())
+year_of_production = st.sidebar.selectbox("سنة التصنيع", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material)]['year_of_production'].unique())
+condition = st.sidebar.selectbox("حالة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material) & (df['year_of_production'] == year_of_production)]['condition'].unique())
+
+# Filter the DataFrame
+filtered_data = df[
+    (df['brand'].str.contains(brand, na=False)) &
+    (df['movement'].str.contains(movement, na=False)) &
+    (df['case_material'].str.contains(case_material, na=False)) &
+    (df['bracelet_material'].str.contains(bracelet_material, na=False)) &
+    (df['year_of_production'].astype(str).str.contains(year_of_production, na=False)) &
+    (df['condition'].str.contains(condition, na=False))
+]
+
+# Show the filtered DataFrame
+st.subheader("الساعات المتوفرة:")
+st.write(filtered_data)
+
 # Conclusion and Recommendations
 # TODO - Rewrite the recommendations
 st.subheader("توصياتنا")
