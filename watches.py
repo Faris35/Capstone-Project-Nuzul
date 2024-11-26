@@ -199,7 +199,8 @@ st.subheader("الساعات المتوفرة:")
 #st.write(filtered_data.drop(columns=['brand', 'movement', 'case_material', 'bracelet_material', 'year_of_production', 'condition']))
 # Add a column for price range for each model within the filtered DataFrame
 filtered_data['price_range'] = filtered_data.groupby('model')['price_usd'].transform(lambda x: f"${x.min()} - ${x.max()}")
-st.write(filtered_data[['model', 'price_usd', 'price_range']])
+filtered_data = filtered_data.drop_duplicates(subset=['model'])
+st.write(filtered_data[['model', 'price_range']])
 
 # Conclusion and Recommendations
 # TODO - Rewrite the recommendations
