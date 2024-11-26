@@ -70,7 +70,7 @@ elif user_type == "مستثمر":
     filtered_df = df[df['condition'] == condition]
 
     # Average Prices by Brand
-    top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(5)
+    top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
     st.markdown("### متوسط الأسعار لأغلى خمس ماركات:")
     st.bar_chart(top_brands)
 
