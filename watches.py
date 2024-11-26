@@ -4,7 +4,7 @@ import matplotlib as plt
 import pandas as pd
 
 
-df = pd.read_csv('watches_final.csv')
+df = pd.read_csv('Final_version2_all_watches.csv')
 
 st.title('ساعتك مو للزينة بس تقدر تستثمر فيها، خلها زينة وخزينة!')
 
