@@ -34,58 +34,58 @@ st.markdown("""
 - أو كنت **مستثمر** تبحث عن عوائد مالية واستثمار ذكي.
 """)
 
-user_type = st.radio("اختر هدفك", ("هاوي", "مستثمر"))
+# user_type = st.radio("اختر هدفك", ("هاوي", "مستثمر"))
 
 # Collector Flow
-if user_type == "هاوي":
-    st.subheader("للهواة: اكتشف أفضل الخيارات الجمالية!")
+# if user_type == "هاوي":
+#     st.subheader("للهواة: اكتشف أفضل الخيارات الجمالية!")
     
-    st.markdown("""
-    للهواة، أهم شيء أنك تختار الساعة اللي تعكس شخصيتك وتناسب ذوقك. هنا بنقدم لك:
-    - توزيع المواد (ذهب، فولاذ، بلاتين) وكيف تؤثر على شكل الساعة.
-    - تحليل الأحجام والأنماط المناسبة (صغيرة أو كبيرة) لكل مناسبة.
-    """)
+#     st.markdown("""
+#     للهواة، أهم شيء أنك تختار الساعة اللي تعكس شخصيتك وتناسب ذوقك. هنا بنقدم لك:
+#     - توزيع المواد (ذهب، فولاذ، بلاتين) وكيف تؤثر على شكل الساعة.
+#     - تحليل الأحجام والأنماط المناسبة (صغيرة أو كبيرة) لكل مناسبة.
+#     """)
     
-    # Material Distribution
-    material_counts = df['case_material'].value_counts()
-    st.markdown("### توزيع المواد الأكثر استخداماً:")
-    st.bar_chart(material_counts)
+#     # Material Distribution
+#     material_counts = df['case_material'].value_counts()
+#     st.markdown("### توزيع المواد الأكثر استخداماً:")
+#     st.bar_chart(material_counts)
 
-    # Size Analysis
-    st.markdown("### توزيع الأحجام (مم):")
-    st.bar_chart(df['size_mm'].value_counts())
+#     # Size Analysis
+#     st.markdown("### توزيع الأحجام (مم):")
+#     st.bar_chart(df['size_mm'].value_counts())
 
 # Investor Flow
-elif user_type == "مستثمر":
-    st.subheader("للمستثمرين: اعرف أكثر عن السوق!")
-    
-    st.markdown("""
-    للمستثمرين، نركز على العوائد المالية وكيف تختار الساعة المناسبة للاستثمار. 
-    - تعرف على الماركات اللي تحافظ على قيمتها أو تزيد مع الوقت.
-    - تابع الأسعار حسب حالة الساعة (جديدة أو مستعملة).
-    """)
-    
-    # Condition Filter
-    condition = st.selectbox('اختر حالة الساعة', df['condition'].unique())
-    filtered_df = df[df['condition'] == condition]
+# elif user_type == "مستثمر":
+st.subheader("للمستثمرين: اعرف أكثر عن السوق!")
 
-    # Average Prices by Brand
-    # TODO - Map it to Arabic
-    # top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
-    top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
-    # st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
-    # st.bar_chart(top_brands)
-    st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
-    st.bar_chart(top_brands_all)
+st.markdown("""
+للمستثمرين، نركز على العوائد المالية وكيف تختار الساعة المناسبة للاستثمار. 
+- تعرف على الماركات اللي تحافظ على قيمتها أو تزيد مع الوقت.
+- تابع الأسعار حسب حالة الساعة (جديدة أو مستعملة).
+""")
 
-    # Correlation between Price and rest of the features and put a drop down menu to select the brand
-    st.markdown("### تحليل العلاقة بين الأسعار والمواصفات:")
-    features = ['model','movement','case_material','bracelet_material','year_of_production','condition','sex','size_mm']
+# Condition Filter
+condition = st.selectbox('اختر حالة الساعة', df['condition'].unique())
+filtered_df = df[df['condition'] == condition]
 
-    # Yearly Trends
-    st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
-    yearly_prices = df.groupby('year_of_production')['price_usd'].mean()
-    st.line_chart(yearly_prices)
+# Average Prices by Brand
+# TODO - Map it to Arabic
+# top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
+top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
+# st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
+# st.bar_chart(top_brands)
+st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
+st.bar_chart(top_brands_all)
+
+# Correlation between Price and rest of the features and put a drop down menu to select the brand
+st.markdown("### تحليل العلاقة بين الأسعار والمواصفات:")
+features = ['model','movement','case_material','bracelet_material','year_of_production','condition','sex','size_mm']
+
+# Yearly Trends
+st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
+yearly_prices = df.groupby('year_of_production')['price_usd'].mean()
+st.line_chart(yearly_prices)
 
 # Additional Insights
 st.subheader("نقاط إضافية مهمة")
