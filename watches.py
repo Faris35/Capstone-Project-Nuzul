@@ -95,8 +95,10 @@ with col1:
     st.bar_chart(top_brands_all)
 
 with col2:
+    top_brands_distribution = df['brand'].value_counts().head(10).index
+    # Filter data for only the top 10 brands
+    top_brands_distribution = df[df['brand'].isin(top_brands_distribution)]
     st.markdown("### توزيع الأسعار لأغلى عشر ماركات:")
-    top_brands_distribution = df[df['brand'].isin(top_brands_all.index)]['brand'].value_counts()
     st.bar_chart(top_brands_distribution)
 
 # # Correlation between Price and rest of the features and put a drop down menu to select the brand
