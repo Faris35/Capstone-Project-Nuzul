@@ -16,7 +16,7 @@ body {
 st.markdown(rtl_css, unsafe_allow_html=True)
 
 # Load data
-df = pd.read_csv('Final_version2_all_watches.csv')
+df = pd.read_csv('Final_version3_all_watches.csv')
 
 # Title
 st.title('ساعتك مو للزينة بس تقدر تستثمر فيها، خلها زينة وخزينة!')
