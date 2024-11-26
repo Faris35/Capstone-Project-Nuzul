@@ -79,78 +79,108 @@ st.markdown("""
 top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
 # st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
 # st.bar_chart(top_brands)
-st.markdown("### أسعار أغلى 10 ماركات:")
-st.bar_chart(top_brands_all)
+st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
+# st.bar_chart(top_brands_all)
 
-# Correlation between Price and rest of the features and put a drop down menu to select the brand
-# Features to analyze
-features = [
-    'model', 'movement', 'case_material', 
-    'bracelet_material', 'year_of_production', 
-    'condition', 'sex', 'size_mm'
-]
+# # Correlation between Price and rest of the features and put a drop down menu to select the brand
+# # Features to analyze
+# features = [
+#     'model', 'movement', 'case_material', 
+#     'bracelet_material', 'year_of_production', 
+#     'condition', 'sex', 'size_mm'
+# ]
 
-# Streamlit header
-st.markdown("### تحليل العلاقة بين الأسعار والمواصفات:")
+# # Streamlit header
+# st.markdown("### تحليل العلاقة بين الأسعار والمواصفات:")
 
-# Select the brand
-selected_brand = st.selectbox("اختر الماركة", df['brand'].unique())
+# # Select the brand
+# selected_brand = st.selectbox("اختر الماركة", df['brand'].unique())
 
-# Filter the DataFrame based on the selected brand
-brand_df = df[df['brand'] == selected_brand].copy()
+# # Filter the DataFrame based on the selected brand
+# brand_df = df[df['brand'] == selected_brand].copy()
 
-# Encode non-numeric columns to numeric using LabelEncoder
-label_encoders = {}
-for feature in features:
-    if brand_df[feature].dtype == 'object':
-        le = LabelEncoder()
-        brand_df[feature] = le.fit_transform(brand_df[feature].astype(str))
-        label_encoders[feature] = le
+# # Encode non-numeric columns to numeric using LabelEncoder
+# label_encoders = {}
+# for feature in features:
+#     if brand_df[feature].dtype == 'object':
+#         le = LabelEncoder()
+#         brand_df[feature] = le.fit_transform(brand_df[feature].astype(str))
+#         label_encoders[feature] = le
 
-# Select the numeric features
-numeric_features = ['price_usd'] + features
+# # Select the numeric features
+# numeric_features = ['price_usd'] + features
 
-# Compute the correlation matrix
-correlation_matrix = brand_df[numeric_features].corr()
+# # Compute the correlation matrix
+# correlation_matrix = brand_df[numeric_features].corr()
 
-# Extracting just the first column (correlations with 'price_usd')
-first_column_corr = correlation_matrix['price_usd'].to_frame()
+# # Extracting just the first column (correlations with 'price_usd')
+# first_column_corr = correlation_matrix['price_usd'].to_frame()
 
-# Plot the heatmap
-fig, ax = plt.subplots()
-sns.heatmap(first_column_corr, annot=True, cmap='coolwarm', fmt=".2f", ax=ax)
-ax.set_title(f"Correlation Heatmap for {selected_brand}", fontsize=14)
-st.pyplot(fig)
+# # Plot the heatmap
+# fig, ax = plt.subplots()
+# sns.heatmap(first_column_corr, annot=True, cmap='coolwarm', fmt=".2f", ax=ax)
+# ax.set_title(f"Correlation Heatmap for {selected_brand}", fontsize=14)
+# st.pyplot(fig)
 
+####################
+
+# size Trends
+st.markdown("### تحليل الأسعار حسب حجم الساعة:")
+size_prices = df.groupby('size_mm')['price_usd'].median()
+st.line_chart(size_prices)
 
 # Yearly Trends
-st.markdown(f"### تحليل الأسعار للماركة {selected_brand} حسب سنوات التصنيع:")
-brand_yearly_prices = brand_df.groupby('year_of_production')['price_usd'].median()
-st.line_chart(brand_yearly_prices)
+st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
+yearly_prices = df.groupby('year_of_production')['price_usd'].median()
+st.line_chart(yearly_prices)
 
+# Model Analysis
+st.markdown("### تحليل الأسعار حسب الموديل:")
+model_prices = df.groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
+st.bar_chart(model_prices)
+
+# Movement Analysis
+st.markdown("### تحليل الأسعار حسب نوع الحركة:")
+movement_prices = df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
+st.bar_chart(movement_prices)
+
+# Case Material Analysis
+st.markdown("### تحليل الأسعار حسب مادة الساعة:")
+case_material_prices = df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
+st.bar_chart(case_material_prices)
+
+# Bracelet Material Analysis
+st.markdown("### تحليل الأسعار حسب مادة السوار:")
+bracelet_material_prices = df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
+st.bar_chart(bracelet_material_prices)
+
+# Condition Analysis
+st.markdown("### تحليل الأسعار حسب حالة الساعة:")
+condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
+st.bar_chart(condition_prices)
 
 # Additional Insights
 # TODO - Add more insights and visualizations 
 st.subheader("نقاط إضافية مهمة")
 st.markdown("""
-- الأسعار يختلف بين الساعات الرجالية والنسائية بشكل ملحوظ.
+- متوسط الأسعار يختلف بين الساعات الرجالية والنسائية بشكل ملحوظ.
 - مادة السوار (جلد، معدن، سيراميك) ممكن تؤثر على السعر.
 - حالة الساعة (جديدة، مستعملة) لها تأثير مباشر على قيمتها.
 """)
 
 # Gender and Price
-st.markdown("### الأسعار حسب الجنس:")
-gender_prices = brand_df.groupby('sex')['price_usd'].median()
+st.markdown("### متوسط الأسعار حسب الجنس:")
+gender_prices = df.groupby('sex')['price_usd'].mean()
 st.bar_chart(gender_prices)
 
 # Bracelet Material Impact
 st.markdown("### تأثير مادة السوار على الأسعار:")
-bracelet_prices = brand_df.groupby('bracelet_material')['price_usd'].median()
+bracelet_prices = df.groupby('bracelet_material')['price_usd'].mean()
 st.bar_chart(bracelet_prices)
 
 # Case Material Impact
 st.markdown("### تأثير مادة الساعة على الأسعار:")
-case_material_prices = brand_df.groupby('case_material')['price_usd'].median()
+case_material_prices = df.groupby('case_material')['price_usd'].mean()
 st.bar_chart(case_material_prices)
 
 # Conclusion and Recommendations
