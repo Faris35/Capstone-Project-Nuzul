@@ -4,6 +4,7 @@ from PIL import Image
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
 
 # Inject CSS for RTL
 rtl_css = """
@@ -82,21 +83,40 @@ st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
 st.bar_chart(top_brands_all)
 
 # Correlation between Price and rest of the features and put a drop down menu to select the brand
+# Features to analyze
+features = [
+    'model', 'movement', 'case_material', 
+    'bracelet_material', 'year_of_production', 
+    'condition', 'sex', 'size_mm'
+]
+
+# Streamlit header
 st.markdown("### تحليل العلاقة بين الأسعار والمواصفات:")
-features = ['model', 'movement', 'case_material', 'bracelet_material', 'year_of_production', 'condition', 'sex', 'size_mm']
 
 # Select the brand
 selected_brand = st.selectbox("اختر الماركة", df['brand'].unique())
 
-# Filter the DataFrame based on selected brand
-brand_df = df[df['brand'] == selected_brand]
+# Filter the DataFrame based on the selected brand
+brand_df = df[df['brand'] == selected_brand].copy()
+
+# Encode non-numeric columns to numeric using LabelEncoder
+label_encoders = {}
+for feature in features:
+    if brand_df[feature].dtype == 'object':
+        le = LabelEncoder()
+        brand_df[feature] = le.fit_transform(brand_df[feature].astype(str))
+        label_encoders[feature] = le
+
+# Select the numeric features
+numeric_features = ['price_usd'] + features
 
 # Compute the correlation matrix
-correlation_matrix = brand_df[['price_usd'] + features].corr()
+correlation_matrix = brand_df[numeric_features].corr()
 
 # Plot the heatmap
-fig, ax = plt.subplots()
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', ax=ax)
+fig, ax = plt.subplots(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", ax=ax)
+ax.set_title(f"Correlation Heatmap for {selected_brand}", fontsize=14)
 st.pyplot(fig)
 
 
