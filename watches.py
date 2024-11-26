@@ -113,9 +113,12 @@ numeric_features = ['price_usd'] + features
 # Compute the correlation matrix
 correlation_matrix = brand_df[numeric_features].corr()
 
+# Extracting just the first column (correlations with 'price_usd')
+first_column_corr = correlation_matrix['price_usd'].to_frame()
+
 # Plot the heatmap
-fig, ax = plt.subplots(figsize=(10, 8))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", ax=ax)
+fig, ax = plt.subplots()
+sns.heatmap(first_column_corr, annot=True, cmap='coolwarm', fmt=".2f", ax=ax)
 ax.set_title(f"Correlation Heatmap for {selected_brand}", fontsize=14)
 st.pyplot(fig)
 
