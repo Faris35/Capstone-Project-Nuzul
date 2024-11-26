@@ -95,11 +95,17 @@ with col1:
     st.bar_chart(top_brands_all)
 
 with col2:
-    top_brands_distribution = df['brand'].value_counts().head(10).index
-    # Filter data for only the top 10 brands
-    top_brands_distribution = df[df['brand'].isin(top_brands_distribution)]
-    st.markdown("### توزيع الأسعار لأغلى عشر ماركات:")
-    st.bar_chart(top_brands_distribution['price_usd'])
+    st.markdown("""
+    ### وش أكثر الماركات انتشاراً؟
+    هذي قائمة بأكثر الماركات اللي منتشرة بين الناس، واللي تسيطر على السوق:
+    """)
+
+    # Calculate the frequency of each brand
+    popular_brands = df['brand'].value_counts().head(10)
+
+    # Display the results in a bar chart
+    st.markdown("### أكثر عشر ماركات انتشاراً:")
+    st.bar_chart(popular_brands)
 
 # # Correlation between Price and rest of the features and put a drop down menu to select the brand
 # # Features to analyze
