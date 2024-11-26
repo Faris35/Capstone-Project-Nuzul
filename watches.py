@@ -88,7 +88,7 @@ features = ['model','movement','case_material','bracelet_material','year_of_prod
 selected_brand = st.selectbox("اختر الماركة", df['brand'].unique())
 brand_df = df[df['brand'] == selected_brand]
 
-correlation_matrix = brand_df[['price_usd', features]].corr()
+correlation_matrix = brand_df[['price_usd']+ features].corr()
 
 fig, ax = plt.subplots()
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', ax=ax)
