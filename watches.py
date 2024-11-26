@@ -6,6 +6,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 
+st.image("zeina.png", width=120)
+
+
 # Inject CSS for RTL
 rtl_css = """
 <style>
@@ -79,6 +82,11 @@ st.markdown("""
 top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
 # st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
 # st.bar_chart(top_brands)
+st.markdown("""
+### تدري وش الماركات اللي تتصدر أغلى الساعات بالعالم؟
+**ريتشارد ميل** متربعة على القمة بأسعارها العالية واللي تعكس ندرتها وفخامتها، تليها **باتيك فيليب** و**أوديمار بيغيه** كخيارات راقية ومميزة.  
+أما **رولكس**، فهي تقدم جودة عالية بفخامة وسعر أقل شوي مقارنة بالباقي.
+""")
 st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
 st.bar_chart(top_brands_all)
 
@@ -125,6 +133,7 @@ st.bar_chart(top_brands_all)
 ####################
 
 # size Trends
+
 st.markdown("### تحليل الأسعار حسب حجم الساعة:")
 size_prices = df.groupby('size_mm')['price_usd'].median()
 st.line_chart(size_prices)
@@ -135,7 +144,6 @@ yearly_prices = df.groupby('year_of_production')['price_usd'].median()
 st.line_chart(yearly_prices)
 
 # Model Analysis
-# TODO - add a drop down menu to select the brand
 selected_brand = st.selectbox("اختر الماركة لتحليل الأسعار حسب الموديل:", df['brand'].unique())
 model_prices = df[df['brand'] == selected_brand].groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
 st.bar_chart(model_prices)
@@ -205,11 +213,144 @@ st.write(filtered_data[['model', 'price_range']])
 
 # Conclusion and Recommendations
 # TODO - Rewrite the recommendations
-st.subheader("توصياتنا")
+
+
+
 st.markdown("""
-بناءً على تحليلنا، هذه أهم النصائح:
-1. إذا كنت هاوي، ركز على الساعات النادرة وذات التصاميم المميزة.
-2. إذا كنت مستثمر، اختار الماركات اللي تحافظ على قيمتها مثل Patek Philippe وRichard Mille.
-3. اهتم بحالة الساعة، الجديدة غالباً تحتفظ بقيمتها بشكل أفضل.
-4. تابع السوق باستمرار وتعلم من الموديلات اللي نجحت.
+الآن بعد ما وضحت لك الصورة أكثر وشفت الماركات اللي لها احتمالية عالية إنك تستفيد منها، صار عندك الخيار تتصفح الماركات وتشوف تفاصيل أكثر عن تأثير الخصائص عليها.
+""")
+
+column_names_mapping = {
+    'model': 'الموديل',
+    'movement': 'نوع الحركة',
+    'case_material': 'مادة الساعة',
+    'bracelet_material': 'مادة السوار',
+    'year_of_production': 'سنة الإنتاج',
+    'condition': 'الحالة',
+    'sex': 'الجنس',
+    'size_mm': 'الحجم (مم)',
+    'price_usd': 'السعر بالدولار'
+}
+
+st.markdown("""
+بعد دراسة البيانات وخصائص الساعات، وصلنا لاستنتاج بأن أغلب الساعات تتأثر بالتالي:
+1. الحجم
+2. سنة التصنيع
+3. الموديل
+4. نوع الحركة
+5. مادة السوار
+
+سنعرض الآن الرسوم البيانية للخصائص المذكورة ومدى تأثيرها على قيمة الساعات.
+""")
+brand_options = ['All'] + top_brands_all.index.tolist()
+
+# Create a dropdown menu for brand selection
+brand_filter = st.selectbox('اختر البراند', brand_options)
+
+# Filter the dataframe based on the selected brand or 'All'
+if brand_filter != "All":
+    filtered_df = df[df['brand'] == brand_filter]
+else:
+    filtered_df = df
+
+# 1. الحجم (Size) 
+st.markdown("##### تحليل تأثير الحجم على السعر:")
+st.markdown("""
+في هذا الرسم البياني، نلاحظ العلاقة بين حجم الساعة وسعرها. 
+هل هناك علاقة بين الحجم والسعر؟ هل الساعات الأكبر حجمًا أغلى عادة؟
+خلنا نكتشف من خلال الرسم البياني.
+""")
+fig_size_price_bubble = px.scatter(filtered_df, x='size_mm', y='price_usd', size='price_usd',
+                                   color='brand', hover_name='model',
+                                   title=f'الحجم والسعر للبراند {brand_filter}', 
+                                   labels={'size_mm': 'الحجم (mm)', 'price_usd': 'السعر (دولار أمريكي)'})
+st.plotly_chart(fig_size_price_bubble)
+st.markdown("""
+كما يظهر في الرسم البياني، في أغلب الحالات، يزداد السعر مع زيادة الحجم. 
+هذا يعني أن هناك علاقة طردية بين حجم الساعة وسعرها.
+""")
+
+# 2. سنة التصنيع (Year of Production) - Line chart
+st.markdown("#### تحليل تأثير سنة التصنيع على السعر:")
+st.markdown("""
+هنا راح نشوف إذا كان سنة التصنيع لها تأثير على السعر. 
+هل الساعات القديمة أغلى؟ ولا الساعات الحديثة هي الأغلى؟ خلونا نكتشف.
+""")
+yearly_prices = filtered_df.groupby('year_of_production')['price_usd'].mean()
+st.markdown(f"تحليل اختلاف الاسعار على حسب سنة الصنع {brand_filter}")
+st.line_chart(yearly_prices)
+
+st.markdown("""
+من الرسم البياني نقدر نشوف أن الساعات الحديثة عمومًا أغلى، لكن في بعض الساعات القديمة لها قيمة عالية جدا.
+""")
+
+# 3. الموديل (Model) - Best model regarding the highest price
+
+st.markdown("#### تحليل الموديلات الأفضل من حيث السعر:")
+st.markdown("""
+في هذا التحليل، بنشوف أفضل الموديلات اللي تحقق أعلى أسعار.
+نتعرف على الموديلات اللي تستحق استثمارك.
+""")
+top_models = filtered_df.groupby('model')['price_usd'].mean().sort_values(ascending=False).head(10)
+fig_model = px.bar(top_models, x=top_models.index, y=top_models.values, 
+                   title=f'أفضل موديلات حسب السعر للبراند {brand_filter}', 
+                   labels={'x': 'الموديل', 'y': 'متوسط السعر (دولار أمريكي)'})
+st.plotly_chart(fig_model)
+st.markdown("""
+من خلال الرسم البياني، نلاحظ أن بعض الموديلات تحقق أسعار أعلى بكثير من غيرها. 
+الموديلات النادرة هي اللي تسجل أعلى الأسعار.
+""")
+
+# 4. نوع الحركة (Movement Type) - Best movement type regarding the highest price
+st.markdown("#### تحليل نوع الحركة وتأثيره على السعر:")
+st.markdown("""
+هنا بنحلل تأثير نوع الحركة على سعر الساعة. 
+هل الساعات ذات الحركة المعقدة أغلى؟ دعونا نكتشف مع الرسم البياني.
+""")
+top_movements = filtered_df.groupby('movement')['price_usd'].mean().sort_values(ascending=False).head(10)
+fig_movement = px.bar(top_movements, x=top_movements.index, y=top_movements.values, 
+                      title=f'أفضل أنواع الحركة حسب السعر للبراند {brand_filter}', 
+                      labels={'x': 'نوع الحركة', 'y': 'متوسط السعر (دولار أمريكي)'})
+st.plotly_chart(fig_movement)
+st.markdown("""
+من الرسم البياني نلاحظ أن الحركة المعقدة أو المتطورة عمومًا تؤدي إلى رفع السعر.
+إذا كنت تدور على ساعة فاخرة، فكر في الحركة اللي تحتها!
+""")
+
+# 5. مادة السوار (Bracelet Material) - Best bracelet material regarding the highest price
+st.markdown("##### تحليل مادة السوار وتأثيرها على السعر:")
+st.markdown("""
+في هذا التحليل، راح نشوف إذا كان نوع السوار له تأثير على السعر. 
+هل الساعات المصنوعة من مواد مثل الذهب أغلى؟ خلونا نكتشف.
+""")
+top_bracelet_materials = filtered_df.groupby('bracelet_material')['price_usd'].mean().sort_values(ascending=False).head(10)
+fig_bracelet_material = px.bar(top_bracelet_materials, x=top_bracelet_materials.index, y=top_bracelet_materials.values, 
+                               title=f'أفضل مواد السوار حسب السعر للبراند {brand_filter}', 
+                               labels={'x': 'مادة السوار', 'y': 'متوسط السعر (دولار أمريكي)'})
+st.plotly_chart(fig_bracelet_material)
+st.markdown("""
+من خلال الرسم البياني نقدر نلاحظ أن بعض المواد مثل الذهب والفولاذ هي اللي ترفع الأسعار.
+إذا كنت تبغى استثمار حقيقي، يمكن المواد هذه تكون اختيارك.
+""")
+
+
+st.markdown("#### توصيات أخيرة:")
+st.markdown("""
+بعد ما استعرضنا تأثير الخصائص المختلفة على سعر الساعات، نحب نشارك معك بعض التوصيات التي يمكن أن تساعدك في اتخاذ القرار الأفضل للاستثمار:
+""")
+st.markdown("""
+1. **اختيار الماركات الشهيرة:**
+   - إذا كنت تبحث عن استثمار طويل الأمد، اختيار الماركات العالمية المعروفة هو الخيار الأفضل، حيث أن هذه الماركات تحافظ على قيمتها أو تزيد بمرور الوقت. وأيضًا، **Richard Mille** تعد من أعلى الماركات من حيث الأسعار، حيث أن الساعات منها تعتبر من الاستثمارات المربحة نظرًا لندرتها وتفرد تصاميمها.
+
+2. **الحجم مهم:** 
+   - بشكل عام، الساعات الأكبر حجمًا قد تكون أغلى، لكن هذا ليس قاعدة ثابتة. راجع الموديلات بحذر وركز على سمعة الماركة.
+
+3. **سنة التصنيع:** 
+   - الساعات الحديثة تكون غالبًا أغلى، لكنها أيضًا تحافظ على قيمتها بمرور الوقت. بعض الساعات القديمة قد تملك قيمة كبيرة إذا كانت نادرة أو مشهورة.
+
+4. **الموديلات النادرة:** 
+   - بعض الموديلات تكون أكثر قيمة من غيرها بسبب ندرتها أو خصوصيتها. إذا كنت مهتمًا بالاستثمار، حاول دائمًا البحث عن الموديلات المميزة التي تتمتع بشعبية.
+            
+5. **نوع الحركة والمادة:** 
+   - كلما كانت الحركة معقدة وأكثر تطورًا، كلما ارتفع السعر. أيضًا، المواد الفاخرة مثل **الذهب الوردي**، **البلاتين**، **الذهب الأبيض**، و **السيراميك** تساهم في رفع السعر بشكل كبير. هذه المواد تضيف قيمة كبيرة للساعة بسبب ندرتها وجودتها العالية.
 """)
