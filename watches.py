@@ -66,9 +66,9 @@ st.markdown("""
 - تابع الأسعار حسب حالة الساعة (جديدة أو مستعملة).
 """)
 
-# Condition Filter
-condition = st.selectbox('اختر حالة الساعة', df['condition'].unique())
-filtered_df = df[df['condition'] == condition]
+# # Condition Filter
+# condition = st.selectbox('اختر حالة الساعة', df['condition'].unique())
+# filtered_df = df[df['condition'] == condition]
 
 # Average Prices by Brand
 # TODO - Map it to Arabic
@@ -91,7 +91,7 @@ st.line_chart(yearly_prices)
 # Additional Insights
 st.subheader("نقاط إضافية مهمة")
 st.markdown("""
-بغض النظر إذا كنت هاوي أو مستثمر، هنا بعض النقاط اللي لازم تعرفها:
+ هنا بعض النقاط اللي لازم تعرفها:
 - متوسط الأسعار يختلف بين الساعات الرجالية والنسائية بشكل ملحوظ.
 - مادة السوار (جلد، معدن، سيراميك) ممكن تؤثر على السعر.
 - حالة الساعة (جديدة، مستعملة) لها تأثير مباشر على قيمتها.
