@@ -71,16 +71,16 @@ elif user_type == "مستثمر":
 
     # Average Prices by Brand
     # TODO - Map it to Arabic
-    top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
+    # top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
     top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
-    st.markdown("### متوسط الأسعار لأغلى خمس ماركات:")
-    st.bar_chart(top_brands)
-    st.markdown("### متوسط الأسعار لأغلى خمس ماركات (جميع الحالات):")
+    # st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
+    # st.bar_chart(top_brands)
+    st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
     st.bar_chart(top_brands_all)
 
     # Correlation between Price and rest of the features and put a drop down menu to select the brand
     st.markdown("### تحليل العلاقة بين الأسعار والمواصفات:")
-    features = ['model','movement','case_material','bracelet_material','year_of_production',condition,'sex','size_mm']
+    features = ['model','movement','case_material','bracelet_material','year_of_production','condition','sex','size_mm']
 
     # Yearly Trends
     st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
