@@ -80,7 +80,7 @@ top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending
 # st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
 # st.bar_chart(top_brands)
 st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
-# st.bar_chart(top_brands_all)
+st.bar_chart(top_brands_all)
 
 # # Correlation between Price and rest of the features and put a drop down menu to select the brand
 # # Features to analyze
@@ -159,6 +159,11 @@ st.markdown("### تحليل الأسعار حسب حالة الساعة:")
 condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
 st.bar_chart(condition_prices)
 
+# Gender and Price
+st.markdown("### متوسط الأسعار حسب الجنس:")
+gender_prices = df.groupby('sex')['price_usd'].median()
+st.bar_chart(gender_prices)
+
 # Additional Insights
 # TODO - Add more insights and visualizations 
 st.subheader("نقاط إضافية مهمة")
@@ -167,21 +172,6 @@ st.markdown("""
 - مادة السوار (جلد، معدن، سيراميك) ممكن تؤثر على السعر.
 - حالة الساعة (جديدة، مستعملة) لها تأثير مباشر على قيمتها.
 """)
-
-# Gender and Price
-st.markdown("### متوسط الأسعار حسب الجنس:")
-gender_prices = df.groupby('sex')['price_usd'].mean()
-st.bar_chart(gender_prices)
-
-# Bracelet Material Impact
-st.markdown("### تأثير مادة السوار على الأسعار:")
-bracelet_prices = df.groupby('bracelet_material')['price_usd'].mean()
-st.bar_chart(bracelet_prices)
-
-# Case Material Impact
-st.markdown("### تأثير مادة الساعة على الأسعار:")
-case_material_prices = df.groupby('case_material')['price_usd'].mean()
-st.bar_chart(case_material_prices)
 
 # Conclusion and Recommendations
 # TODO - Rewrite the recommendations
