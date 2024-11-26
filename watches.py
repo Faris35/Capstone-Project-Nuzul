@@ -89,9 +89,9 @@ yearly_prices = df.groupby('year_of_production')['price_usd'].mean()
 st.line_chart(yearly_prices)
 
 # Additional Insights
+# TODO - Add more insights and visualizations 
 st.subheader("نقاط إضافية مهمة")
 st.markdown("""
- هنا بعض النقاط اللي لازم تعرفها:
 - متوسط الأسعار يختلف بين الساعات الرجالية والنسائية بشكل ملحوظ.
 - مادة السوار (جلد، معدن، سيراميك) ممكن تؤثر على السعر.
 - حالة الساعة (جديدة، مستعملة) لها تأثير مباشر على قيمتها.
