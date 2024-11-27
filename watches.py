@@ -37,14 +37,49 @@ st.markdown(rtl_css, unsafe_allow_html=True)  # Applying RTL style for Arabic al
 df = pd.read_csv('Final_version4_all_watches.csv')  # Load watch data; ensure file exists in the correct location
 
 # Adding a catchy title to the app
-st.title('ساعتك مو للزينة بس تقدر تستثمر فيها، خلها زينة وخزينة!')
+st.markdown("""
+    <style>
+        .main-title {
+            font-family: 'Georgia', sans-serif;
+            font-size: 30px;
+            font-weight: bold;
+            color: #3b1277; /* Smooth blue color for the title */
+            #text-align: center;
+            margin-top: 50px; /* Space above the title */
+            line-height: 1.4;
+        }
+    </style>
+    <div class="main-title">
+        ساعتك مو للزينة بس تقدر تستثمر فيها، خلها زينة وخزينة!
+    </div>
+""", unsafe_allow_html=True)
 
 # Adding a description and context for the app
+
+
 st.markdown("""
+        <style>
+        .custom-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            font-weight: 400; /* Regular weight for better readability */
+            color: #444444; /* Neutral dark gray for both light and dark modes */
+            text-align: justify;
+            line-height: 1.8; /* Comfortable line spacing */
+            margin-bottom: 20px; /* Space below the text */
+        }
+        .highlight {
+            color: #6D9DC5; /* Gold color to emphasize certain phrases */
+            font-weight: bold;
+        }
+        </style>
+        <div class="custom-text">
             فكرت تشتري ساعة غالية؟ يقولون الساعات الفخمة مو بس زينة، لكنها استثمار يرفع قيمتها مع الوقت. والمؤثرين يتكلمون عنها كأنها الذهب الجديد، لكن هل كلامهم صحيح؟
 
-في "زينة وخزينة"، حللنا سوق الساعات عشان نفهم وش يفرق بين الماركات ونترك الحكم لك. جمعنا البيانات من موقع "Chrono24"، المتخصص في بيع الساعات الجديدة والمستعملة، لتقديم صورة واضحة تساعدك في معرفة إذا كانت الساعات الفاخرة مجرد زينة أم استثمار حقيقي
-""")
+        في "زينة وخزينة"، حللنا سوق الساعات عشان نفهم وش يفرق بين الماركات ونترك الحكم لك. جمعنا البيانات من موقع "Chrono24"، المتخصص في بيع الساعات الجديدة والمستعملة، لتقديم صورة واضحة تساعدك في معرفة إذا كانت الساعات الفاخرة مجرد زينة أم استثمار حقيقي
+
+        </div>
+        """, unsafe_allow_html=True)
 
 # URL and logo details
 url = "https://www.chrono24.com/"
