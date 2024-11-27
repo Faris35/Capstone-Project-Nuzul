@@ -6,6 +6,7 @@ import seaborn as sns  # For statistical data visualization
 import matplotlib.pyplot as plt  # For plotting charts
 from sklearn.preprocessing import LabelEncoder  # For encoding categorical variables
 import plotly.express as px  # For interactive visualizations
+import numpy as np  # For numerical computing
 
 # Displaying a logo or an image on the app
 col1, col2, col3 = st.columns(3)
@@ -139,7 +140,7 @@ st.pyplot(fig)
 
 
 # Calculate median price for top 10 watch brands
-top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
+top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(5)
 
 # Split the layout into two columns for better data presentation
 
@@ -158,7 +159,7 @@ with col1:
     أما **رولكس**، فهي تقدم جودة عالية بفخامة وسعر أقل شوي مقارنة بالباقي.
     """)
     # Display a bar chart for the median price of the top brands
-    st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
+    st.markdown("### متوسط الأسعار لأغلى 5 ماركات:")
     st.bar_chart(top_brands_all)
 
 with col2:
@@ -170,8 +171,8 @@ with col2:
     بينما **أوميغا** و**تاغ هوير** ركزت على الشعبية والجودة بسعر أقل.
     """)
     # Display a bar chart for the most popular brands
-    popular_brands = df['brand'].value_counts().head(10)
-    st.markdown("### أكثر عشر ماركات انتشاراً:")
+    popular_brands = df['brand'].value_counts().head(5)
+    st.markdown("### أشهر 5 ماركات:")
     st.bar_chart(popular_brands)
 
 # Add a detailed markdown for data insights and analysis
