@@ -189,6 +189,15 @@ st.markdown("""
 """)
 
 # Create a dropdown menu for selecting the chart to display
+
+
+selected_brand = st.selectbox("اختر الماركة:", ["All Brands"] + list(df['brand'].unique()))
+
+# Filter the dataframe based on the selected brand
+if selected_brand != "All Brands":
+    df = df[df['brand'] == selected_brand]
+
+# Create a dropdown menu for selecting the chart to display
 chart_option = st.selectbox(
     "اختر الرسم البياني لعرضه:",
     [
@@ -221,14 +230,12 @@ elif chart_option == "تحليل الأسعار حسب سنوات التصنيع
     st.line_chart(yearly_prices)
 
 elif chart_option == "تحليل الأسعار حسب الموديل":
-    selected_brand = st.selectbox("اختر الماركة لتحليل الأسعار حسب الموديل:", df['brand'].unique())
-    model_prices = df[df['brand'] == selected_brand].groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
+    model_prices = df.groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
+    st.markdown("### تحليل الأسعار حسب الموديل:")
     st.bar_chart(model_prices)
 
 elif chart_option == "تحليل الأسعار حسب نوع الحركة":
-    selected_brand = st.selectbox("اختر الماركة لتحليل الأسعار حسب نوع الحركة:", df['brand'].unique())
-    filtered_df = df[df['brand'] == selected_brand]
-    movement_prices = filtered_df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
+    movement_prices = df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
     st.markdown("### تحليل الأسعار حسب نوع الحركة:")
     st.bar_chart(movement_prices)
 
@@ -250,7 +257,7 @@ elif chart_option == "ترند مواد تصنيع الهياكل حسب الع�
     )
     st.plotly_chart(fig)
 
-elif chart_option == "تحليل الأسعار حسب مادة الساعة":
+    ## Case material prices analysis
     selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", df['year_of_production'].unique())
     year_filtered_df = df[df['year_of_production'] == selected_year]
     case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
@@ -266,6 +273,7 @@ elif chart_option == "متوسط الأسعار حسب الجنس":
     gender_prices = df.groupby('sex')['price_usd'].median()
     st.markdown("### متوسط الأسعار حسب الجنس:")
     st.bar_chart(gender_prices)
+
 
 # Additional insights section
 st.subheader("نقاط إضافية مهمة")
