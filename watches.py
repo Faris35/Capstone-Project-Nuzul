@@ -242,16 +242,16 @@ elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     )
 
     # Update layout for improved appearance
-    fig_size_price_bubble.update_layout(
-        width=1500,
-        height=900,
-        title_font_size=35,
-        xaxis_title_font_size=35,
-        yaxis_title_font_size=35,
-        xaxis_tickfont_size=20,
-        yaxis_tickfont_size=20,
-        legend_title_font_size=20
-    )
+    # fig_size_price_bubble.update_layout(
+    #     width=1500,
+    #     height=900,
+    #     title_font_size=35,
+    #     xaxis_title_font_size=35,
+    #     yaxis_title_font_size=35,
+    #     xaxis_tickfont_size=20,
+    #     yaxis_tickfont_size=20,
+    #     legend_title_font_size=20
+    # )
 
     st.plotly_chart(fig_size_price_bubble)
 
