@@ -157,7 +157,7 @@ st.markdown("""
 أما **رولكس**، فهي تقدم جودة عالية بفخامة وسعر أقل شوي مقارنة بالباقي.
 """)
 # Display a bar chart for the median price of the top brands
-st.markdown("### أغلى 5 ماركات:")
+# st.markdown("### أغلى 10 ماركات:")
 # Calculate median price for top 10 watch brands
 top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
 st.bar_chart(top_brands_all)
@@ -165,14 +165,14 @@ st.bar_chart(top_brands_all)
 # with col2:
     # Add insights about brand popularity
 st.markdown("""
-### شفنا أغلى الماركات، لكن هنا الصورة تختلف:
+### شفنا أغلى الماركات، بس وش الأكثر انتشاراً؟:
 **رولكس** جمعت بين السعر المعقول والانتشار الأكبر.  
 **باتيك فيليب**، رغم أنها من الأغلى، إلا أنها برضو من الأكثر انتشاراً.  
 بينما **أوميغا** و**تاغ هوير** ركزت على الشعبية والجودة بسعر أقل.
 """)
 # Display a bar chart for the most popular brands
 popular_brands = df['brand'].value_counts().head(10)
-st.markdown("### أشهر 5 ماركات:")
+# st.markdown("### أشهر 10 ماركات:")
 st.bar_chart(popular_brands)
 
 # Add a detailed markdown for data insights and analysis
