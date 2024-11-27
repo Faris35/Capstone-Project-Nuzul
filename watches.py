@@ -97,42 +97,47 @@ st.markdown(""" تم تقييم حجم سوق الساعات الفاخرة بح
 #st.image("./Global_Luxury_Watch_Market.jpg",width=500)
 
 # Data for the Luxury Watch Market
-years = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2030, 2031, 2032]
-market_sizes = [15, 20, 30, 42.9, 45.1, 50, 55, 60, 65, 68.2, 68.2, 68.2]
+# years = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2030, 2031, 2032]
+# market_sizes = [15, 20, 30, 42.9, 45.1, 50, 55, 60, 65, 68.2, 68.2, 68.2]
 
 import plotly.graph_objects as go
+import json
 
-# Create the bar chart
-fig = go.Figure()
-fig.add_trace(go.Bar(
+# # Create the bar chart
+# fig = go.Figure()
+# fig.add_trace(go.Bar(
 
-    x=years,
+#     x=years,
 
-    y=market_sizes,
+#     y=market_sizes,
 
-    marker_color='red',
+#     marker_color='red',
 
-    name="Market Size (USD Bn)"
+#     name="Market Size (USD Bn)"
 
-))
+# ))
 
-# Update the layout
-fig.update_layout(
+# # Update the layout
+# fig.update_layout(
 
-    title="Luxury Watch Market",
+#     title="Luxury Watch Market",
 
-    xaxis_title="Year",
+#     xaxis_title="Year",
 
-    yaxis_title="Market Size in USD Bn",
+#     yaxis_title="Market Size in USD Bn",
 
-    template="plotly_white",
+#     template="plotly_white",
 
-    font=dict(size=14),
+#     font=dict(size=14),
 
-    showlegend=False
+#     showlegend=False
 
-)
-fig.show()
+# )
+with open("luxury_watch_market.json", "r") as file:
+    fig = go.Figure(json.load(file))
+
+# Display the chart in the Streamlit app
+st.plotly_chart(fig)
 
 # Create the bar chart using Plotly Express
 # fig = px.bar(
