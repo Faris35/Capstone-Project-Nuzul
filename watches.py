@@ -143,6 +143,12 @@ st.pyplot(fig)
 top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
 
 # Split the layout into two columns for better data presentation
+
+st.markdown(""" 
+            ## قل نبدأ في تحليل السوق وش أول شي يجي في بالك اول ماتسمع ساعة فاخرة؟ 
+            #### في هذا الرسم البياني راح نستعرض لكم متوسط الأسعار لأغلى 5 براندات
+        
+             """)
 col1, col2 = st.columns(2)
 
 with col1:
