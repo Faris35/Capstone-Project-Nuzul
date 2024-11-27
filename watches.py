@@ -226,12 +226,24 @@ chart_option = st.selectbox(
 if chart_option == "تحليل الأسعار حسب حالة الساعة":
     if selected_brand != "All Brands":
         # Filter the data for the selected brand
+        filtered_data = df[df['brand'] == selected_brand].copy()
 
         # Add year_of_production to model for display
-        df['model_with_year'] = df['model'] + " (" + df['year_of_production'].astype(str) + ")"
+        filtered_data['model_with_year'] = filtered_data['model'] + " (" + filtered_data['year_of_production'].astype(str) + ")"
 
         # Group by 'condition' and 'model_with_year'
-        condition_model_prices = df.groupby(['condition', 'model_with_year'])['price_usd'].median().reset_index()
+        condition_model_prices = filtered_data.groupby(['condition', 'model_with_year'])['price_usd'].median().reset_index()
+
+        # Limit to top 20 models by median price
+        top_models = (
+            condition_model_prices
+            .groupby('model_with_year')['price_usd']
+            .median()
+            .sort_values(ascending=False)
+            .head(20)
+            .index
+        )
+        condition_model_prices = condition_model_prices[condition_model_prices['model_with_year'].isin(top_models)]
 
         # Create a Sunburst chart with 'condition' and 'model_with_year' as hierarchical levels
         fig = px.sunburst(
@@ -255,8 +267,10 @@ if chart_option == "تحليل الأسعار حسب حالة الساعة":
             color_continuous_scale='viridis',
             title="تحليل الأسعار حسب حالة الساعة والماركة",
         )
+
     # Render the Plotly chart in Streamlit
     st.plotly_chart(fig, use_container_width=True)
+
 
 elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     size_prices = df.groupby('size_mm')['price_usd'].median()
