@@ -276,28 +276,28 @@ st.markdown("""
 """)
 
 # Interactive filters for watch specifications
-st.header("اختر مواصفات الساعة:")
-brand = st.selectbox("البراند", df['brand'].unique())
-movement = st.selectbox("نوع الحركة", df[df['brand'] == brand]['movement'].unique())
-case_material = st.selectbox("مادة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement)]['case_material'].unique())
-bracelet_material = st.selectbox("مادة السوار", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material)]['bracelet_material'].unique())
-year_of_production = st.selectbox("سنة التصنيع", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material)]['year_of_production'].unique())
-condition = st.selectbox("حالة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material) & (df['year_of_production'] == year_of_production)]['condition'].unique())
+# st.header("اختر مواصفات الساعة:")
+# brand = st.selectbox("البراند", df['brand'].unique())
+# movement = st.selectbox("نوع الحركة", df[df['brand'] == brand]['movement'].unique())
+# case_material = st.selectbox("مادة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement)]['case_material'].unique())
+# bracelet_material = st.selectbox("مادة السوار", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material)]['bracelet_material'].unique())
+# year_of_production = st.selectbox("سنة التصنيع", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material)]['year_of_production'].unique())
+# condition = st.selectbox("حالة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material) & (df['year_of_production'] == year_of_production)]['condition'].unique())
 
-# Filter data based on selected criteria
-filtered_data = df[
-    (df['brand'] == brand) &
-    (df['movement'] == movement) &
-    (df['case_material'] == case_material) &
-    (df['bracelet_material'] == bracelet_material) &
-    (df['year_of_production'] == year_of_production) &
-    (df['condition'] == condition)
-]
+# # Filter data based on selected criteria
+# filtered_data = df[
+#     (df['brand'] == brand) &
+#     (df['movement'] == movement) &
+#     (df['case_material'] == case_material) &
+#     (df['bracelet_material'] == bracelet_material) &
+#     (df['year_of_production'] == year_of_production) &
+#     (df['condition'] == condition)
+# ]
 
 
 
-# Display available watches based on the selected filters
-st.subheader("الساعات المتوفرة:")
-filtered_data['price_range'] = filtered_data.groupby('model')['price_usd'].transform(lambda x: f"${x.min()} - ${x.max()}")
-filtered_data = filtered_data.drop_duplicates(subset=['model'])
-st.write(filtered_data[['model', 'price_range']])  # Display filtered watch details
+# # Display available watches based on the selected filters
+# st.subheader("الساعات المتوفرة:")
+# filtered_data['price_range'] = filtered_data.groupby('model')['price_usd'].transform(lambda x: f"${x.min()} - ${x.max()}")
+# filtered_data = filtered_data.drop_duplicates(subset=['model'])
+# st.write(filtered_data[['model', 'price_range']])  # Display filtered watch details
