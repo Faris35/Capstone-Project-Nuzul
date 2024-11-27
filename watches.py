@@ -225,20 +225,25 @@ chart_option = st.selectbox(
 # Display the selected chart
 if chart_option == "تحليل الأسعار حسب حالة الساعة":
     if selected_brand != "All Brands":
-        # Group by 'condition' and 'model' for the selected brand
-        condition_model_prices = df.groupby(['condition', 'model'])['price_usd'].median().reset_index()
+        # Filter the data for the selected brand
 
-        # Create a Sunburst chart with 'condition' and 'model' as hierarchical levels
+        # Add year_of_production to model for display
+        df['model_with_year'] = df['model'] + " (" + df['year_of_production'].astype(str) + ")"
+
+        # Group by 'condition' and 'model_with_year'
+        condition_model_prices = df.groupby(['condition', 'model_with_year'])['price_usd'].median().reset_index()
+
+        # Create a Sunburst chart with 'condition' and 'model_with_year' as hierarchical levels
         fig = px.sunburst(
             condition_model_prices,
-            path=['condition', 'model'],  # Hierarchical levels: Condition > Model
-            values='price_usd',          # Size of the segments
-            color='price_usd',           # Color based on price
+            path=['condition', 'model_with_year'],  # Hierarchical levels: Condition > Model (with year)
+            values='price_usd',                     # Size of the segments
+            color='price_usd',                      # Color based on price
             color_continuous_scale='viridis',
-            title=f"تحليل الأسعار حسب حالة الساعة والموديلات للماركة: {selected_brand}",
+            title=f"تحليل الأسعار حسب حالة الساعة والموديلات (مع سنة التصنيع) للماركة: {selected_brand}",
         )
     else:
-        # Group by 'condition' and 'brand' for all brands
+        # Group by 'condition' and 'brand' for all data
         condition_brand_prices = df.groupby(['condition', 'brand'])['price_usd'].median().reset_index()
 
         # Create a Sunburst chart with 'condition' and 'brand' as hierarchical levels
@@ -250,7 +255,6 @@ if chart_option == "تحليل الأسعار حسب حالة الساعة":
             color_continuous_scale='viridis',
             title="تحليل الأسعار حسب حالة الساعة والماركة",
         )
-
     # Render the Plotly chart in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
