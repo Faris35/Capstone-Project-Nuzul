@@ -188,72 +188,84 @@ st.markdown("""
 سنعرض الآن الرسوم البيانية للخصائص المذكورة ومدى تأثيرها على قيمة الساعات.
 """)
 
-# Median price based on watch condition
-condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
-st.markdown("### تحليل الأسعار حسب حالة الساعة:")
-st.bar_chart(condition_prices)  # Display a bar chart
-
-# Median price based on size
-size_prices = df.groupby('size_mm')['price_usd'].median()
-st.markdown("### تحليل الأسعار حسب حجم الساعة:")
-st.line_chart(size_prices)  # Display a line chart
-
-# Median price over the years
-yearly_prices = df.groupby('year_of_production')['price_usd'].median()
-st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
-st.line_chart(yearly_prices)  # Display a line chart
-
-# Allow users to select a brand for further analysis
-selected_brand = st.selectbox("اختر الماركة لتحليل الأسعار حسب الموديل:", df['brand'].unique())
-model_prices = df[df['brand'] == selected_brand].groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
-st.bar_chart(model_prices)  # Display a bar chart for models of the selected brand
-
-# Filter data for the selected brand
-filtered_df = df[df['brand'] == selected_brand]
-
-# Median price based on movement type
-movement_prices = filtered_df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
-st.markdown("### تحليل الأسعار حسب نوع الحركة:")
-st.bar_chart(movement_prices)
-
-## Trend of Case Metarial ###
-st.markdown("##### في الرسم البياني التالي راح يظهر لنا عدد الساعات بناءً على نوع الهيكل المصنع منه الساعة على الى مر العقود الماضية. هذا الرسم البياني مع الرسم البياني في (تحليل الأسعار حسب مادة الساعة) راح يفيدك في اختيار المادة الاكثر طلباً والاكثر سعراً")
-st.markdown("### ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)")
-
-# Filter dataset for specific year range and add a decade column
-start_year = 1900
-end_year = 2023
-filtered_df = filtered_df[(filtered_df['year_of_production'] >= start_year) & (filtered_df['year_of_production'] <= end_year)]
-filtered_df['decade'] = (filtered_df['year_of_production'] // 10) * 10  # Group by decade
-
-# Analyze the number of watches based on case material per decade
-case_material_count = filtered_df.groupby(['decade', 'case_material']).size().reset_index(name='count')
-fig = px.line(
-    case_material_count,
-    x='decade',
-    y='count',
-    color='case_material',
-    markers=True,
-    labels={'count': 'عدد الساعات بحسب نوع الهيكل', 'decade': 'عقد'}
+# Create a dropdown menu for selecting the chart to display
+chart_option = st.selectbox(
+    "اختر الرسم البياني لعرضه:",
+    [
+        "تحليل الأسعار حسب حالة الساعة",
+        "تحليل الأسعار حسب حجم الساعة",
+        "تحليل الأسعار حسب سنوات التصنيع",
+        "تحليل الأسعار حسب الموديل",
+        "تحليل الأسعار حسب نوع الحركة",
+        "ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)",
+        "تحليل الأسعار حسب مادة الساعة",
+        "تحليل الأسعار حسب مادة السوار",
+        "متوسط الأسعار حسب الجنس"
+    ]
 )
-st.plotly_chart(fig)  # Interactive line chart for decade-wise data
 
-# Allow users to select a year and analyze case materials
-selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", filtered_df['decade'].unique())
-year_filtered_df = filtered_df[filtered_df['year_of_production'] == selected_year]
-case_material_prices = year_filtered_df.groupby('case_material')['decade'].median().sort_values(ascending=False)
-st.markdown("### تحليل الأسعار حسب مادة الساعة:")
-st.bar_chart(case_material_prices)
+# Display the selected chart
+if chart_option == "تحليل الأسعار حسب حالة الساعة":
+    condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
+    st.markdown("### تحليل الأسعار حسب حالة الساعة:")
+    st.bar_chart(condition_prices)
 
-# Median price based on bracelet material
-bracelet_material_prices = filtered_df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
-st.markdown("### تحليل الأسعار حسب مادة السوار:")
-st.bar_chart(bracelet_material_prices)
+elif chart_option == "تحليل الأسعار حسب حجم الساعة":
+    size_prices = df.groupby('size_mm')['price_usd'].median()
+    st.markdown("### تحليل الأسعار حسب حجم الساعة:")
+    st.line_chart(size_prices)
 
-# Median price based on gender
-gender_prices = filtered_df.groupby('sex')['price_usd'].median()
-st.markdown("### متوسط الأسعار حسب الجنس:")
-st.bar_chart(gender_prices)
+elif chart_option == "تحليل الأسعار حسب سنوات التصنيع":
+    yearly_prices = df.groupby('year_of_production')['price_usd'].median()
+    st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
+    st.line_chart(yearly_prices)
+
+elif chart_option == "تحليل الأسعار حسب الموديل":
+    selected_brand = st.selectbox("اختر الماركة لتحليل الأسعار حسب الموديل:", df['brand'].unique())
+    model_prices = df[df['brand'] == selected_brand].groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
+    st.bar_chart(model_prices)
+
+elif chart_option == "تحليل الأسعار حسب نوع الحركة":
+    selected_brand = st.selectbox("اختر الماركة لتحليل الأسعار حسب نوع الحركة:", df['brand'].unique())
+    filtered_df = df[df['brand'] == selected_brand]
+    movement_prices = filtered_df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
+    st.markdown("### تحليل الأسعار حسب نوع الحركة:")
+    st.bar_chart(movement_prices)
+
+elif chart_option == "ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)":
+    st.markdown("##### في الرسم البياني التالي راح يظهر لنا عدد الساعات بناءً على نوع الهيكل المصنع منه الساعة على الى مر العقود الماضية. هذا الرسم البياني مع الرسم البياني في (تحليل الأسعار حسب مادة الساعة) راح يفيدك في اختيار المادة الاكثر طلباً والاكثر سعراً")
+    st.markdown("### ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)")
+    start_year = 1900
+    end_year = 2023
+    filtered_df = df[(df['year_of_production'] >= start_year) & (df['year_of_production'] <= end_year)]
+    filtered_df['decade'] = (filtered_df['year_of_production'] // 10) * 10
+    case_material_count = filtered_df.groupby(['decade', 'case_material']).size().reset_index(name='count')
+    fig = px.line(
+        case_material_count,
+        x='decade',
+        y='count',
+        color='case_material',
+        markers=True,
+        labels={'count': 'عدد الساعات بحسب نوع الهيكل', 'decade': 'عقد'}
+    )
+    st.plotly_chart(fig)
+
+elif chart_option == "تحليل الأسعار حسب مادة الساعة":
+    selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", df['year_of_production'].unique())
+    year_filtered_df = df[df['year_of_production'] == selected_year]
+    case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
+    st.markdown("### تحليل الأسعار حسب مادة الساعة:")
+    st.bar_chart(case_material_prices)
+
+elif chart_option == "تحليل الأسعار حسب مادة السوار":
+    bracelet_material_prices = df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
+    st.markdown("### تحليل الأسعار حسب مادة السوار:")
+    st.bar_chart(bracelet_material_prices)
+
+elif chart_option == "متوسط الأسعار حسب الجنس":
+    gender_prices = df.groupby('sex')['price_usd'].median()
+    st.markdown("### متوسط الأسعار حسب الجنس:")
+    st.bar_chart(gender_prices)
 
 # Additional insights section
 st.subheader("نقاط إضافية مهمة")
