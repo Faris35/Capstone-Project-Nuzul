@@ -105,7 +105,7 @@ with col3:
             <div class="widget widget6">مادة السوار</div>
             <div class="widget widget7">السعر</div>
             <div class="widget widget8">رجالي/نسائي</div>
-            <div class="widget widget9">رقم مرجعي</div>
+            <div class="widget widget9">الرقم المرجعي</div>
         </div>
     """, unsafe_allow_html=True)
 
