@@ -15,7 +15,7 @@ with col1:
     st.write(' ')
 
 with col2:
-    st.image("zeina.png", use_container_width=True)  # Display an image with a specific width
+    st.image("zeina.png", width= 200)  # Display an image with a specific width
 
 with col3:
     st.write(' ')
@@ -196,7 +196,8 @@ fig2.update_traces(marker=dict(line=dict(width=1, color='black')))
 st.plotly_chart(fig2)
 
 
-st.image("feature.png", use_container_width=True)
+st.image("feature.png",  use_column_width=True)  
+
 
 # Create a dropdown menu for selecting the chart to display
 selected_brand = st.selectbox("اختر الماركة:", ["All Brands"] + list(df['brand'].unique()))
@@ -229,28 +230,46 @@ if chart_option == "تحليل الأسعار حسب حالة الساعة":
 
 elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     size_prices = df.groupby('size_mm')['price_usd'].median()
+
+    distinct_color_map = {
+    "A. Lange & Söhne": "#e6194b",  # Bright Red
+    "Audemars Piguet": "#3cb44b",  # Bright Green
+    "Breitling": "#ffe119",        # Bright Yellow
+    "Cartier": "#4363d8",          # Bright Blue
+    "Hublot": "#f58231",           # Bright Orange
+    "IWC": "#911eb4",              # Bright Purple
+    "Jaeger-LeCoultre": "#42d4f4", # Cyan
+    "Longines": "#f032e6",         # Magenta
+    "Omega": "#bfef45",            # Lime
+    "Oris": "#fabebe",             # Light Pink
+    "Panerai": "#469990",          # Teal
+    "Patek Philippe": "#e6beff",   # Lavender
+    "Rado": "#9a6324",             # Brown
+    "Richard Mille": "#fffac8",    # Light Yellow
+    "Rolex": "#800000",            # Maroon
+    "Seiko": "#aaffc3",            # Mint Green
+    "Sinn": "#808000",             # Olive
+    "TAG Heuer": "#ffd8b1",        # Peach
+    "Tudor": "#000075",            # Navy
+    "Vacheron Constantin": "#808080", # Gray
+    "Zenith": "#000000"            # Black
+    }
+
+# Create the scatter plot
     fig_size_price_bubble = px.scatter(
-        df,
-        x='size_mm',
-        y='price_usd',
-        size='price_usd',
-        color='brand',
-        hover_name='model',
-        title=f'الحجم والسعر للبراند {selected_brand}',
-        labels={'size_mm': 'الحجم (mm)', 'price_usd': 'السعر (دولار أمريكي)'}
+    df,
+    x='size_mm',
+    y='price_usd',
+    size='price_usd',
+    color='brand',
+    hover_name='model',
+    color_discrete_map=distinct_color_map,  # Apply the distinct color map
+    labels={'size_mm': 'الحجم (mm)', 'price_usd': 'السعر (دولار أمريكي)'}
     )
 
-    # Update layout for improved appearance
-    # fig_size_price_bubble.update_layout(
-    #     width=1500,
-    #     height=900,
-    #     title_font_size=35,
-    #     xaxis_title_font_size=35,
-    #     yaxis_title_font_size=35,
-    #     xaxis_tickfont_size=20,
-    #     yaxis_tickfont_size=20,
-    #     legend_title_font_size=20
-    # )
+    fig_size_price_bubble.update_layout(
+    legend=dict(orientation="v", x=1.05, y=1)  # Adjust legend position
+)
 
     st.plotly_chart(fig_size_price_bubble)
 
