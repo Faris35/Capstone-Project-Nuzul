@@ -7,8 +7,21 @@ import matplotlib.pyplot as plt  # For plotting charts
 from sklearn.preprocessing import LabelEncoder  # For encoding categorical variables
 import plotly.express as px  # For interactive visualizations
 
+# Set Streamlit to wide mode
+st.set_page_config(layout="wide")
+
 # Displaying a logo or an image on the app
-st.image("zeina.png", width=120)  # Display an image with a specific width
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.write(' ')
+
+with col2:
+    st.image("zeina.png", width= 200)  # Display an image with a specific width
+
+with col3:
+    st.write(' ')
+
 
 
 # Adding RTL (Right-to-Left) styling for Arabic content
