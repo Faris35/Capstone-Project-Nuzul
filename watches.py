@@ -108,6 +108,10 @@ movement_prices = filtered_df.groupby('movement')['price_usd'].median().sort_val
 st.markdown("### تحليل الأسعار حسب نوع الحركة:")
 st.bar_chart(movement_prices)
 
+## Trend of Case Metarial ###
+st.markdown("##### في الرسم البياني التالي راح يظهر لنا عدد الساعات بناءً على نوع الهيكل المصنع منه الساعة على الى مر العقود الماضية. هذا الرسم البياني مع الرسم البياني في (تحليل الأسعار حسب مادة الساعة) راح يفيدك في اختيار المادة الاكثر طلباً والاكثر سعراً")
+st.markdown("### ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)")
+
 # Filter dataset for specific year range and add a decade column
 start_year = 1900
 end_year = 2023
