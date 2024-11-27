@@ -45,13 +45,51 @@ st.markdown("""
 في "زينة وخزينة"، حللنا سوق الساعات عشان نفهم وش يفرق بين الماركات ونترك الحكم لك. جمعنا البيانات من موقع "Chrono24"، المتخصص في بيع الساعات الجديدة والمستعملة، لتقديم صورة واضحة تساعدك في معرفة إذا كانت الساعات الفاخرة مجرد زينة أم استثمار حقيقي
 """)
 
+import streamlit as st
+
+# URL and logo details
 url = "https://www.chrono24.com/"
+logo_path = "./logo-positive-reduced.svg"
 
-# Display the image
-st.image("./logo-positive-reduced.svg", width=150)
+# Custom CSS for smaller widgets
+st.markdown("""
+    <style>
+    .widget {
+        display: block;
+        margin: 3px 0;
+        padding: 5px;
+        border-radius: 6px;
+        font-size: 14px;
+        color: black;
+        text-align: center;
+        font-weight: bold;
+        background-color: #f0f0f0;
+        cursor: pointer;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# Add a clickable caption using markdown
-st.markdown(f"[Click Here For More Information]({url})", unsafe_allow_html=True)
+# Create 3 columns
+col1, col2, col3 = st.columns(3)
+
+# Column 1: Logo
+with col1:
+    st.image(logo_path, width=150)
+    st.markdown(f"[للإطلاع]({url})", unsafe_allow_html=True)
+
+# Column 2: Watches text
+with col2:
+    st.markdown("<h4 style='text-align: center;'>40,000+<br>ساعة</h4>", unsafe_allow_html=True)
+
+# Column 3: Smaller Arabic widgets
+with col3:
+    st.markdown('<div class="widget">الحالة</div>', unsafe_allow_html=True)
+    st.markdown('<div class="widget">الحجم</div>', unsafe_allow_html=True)
+    st.markdown('<div class="widget">سنة التصنيع</div>', unsafe_allow_html=True)
+    st.markdown('<div class="widget">الموديل</div>', unsafe_allow_html=True)
+    st.markdown('<div class="widget">نوع الحركة</div>', unsafe_allow_html=True)
+    st.markdown('<div class="widget">مادة السوار</div>', unsafe_allow_html=True)
+
 
 st.markdown("#### هل سوق الساعات في نمو مستمر؟")
 
