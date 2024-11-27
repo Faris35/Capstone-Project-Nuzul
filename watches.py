@@ -148,7 +148,7 @@ top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending
 # Split the layout into two columns for better data presentation
 
 st.markdown(""" 
-            ## قل نبدأ في تحليل السوق وش أول شي يجي في بالك اول ماتسمع ساعة فاخرة؟ 
+            ## قل نبدأ في تحليل السوق وش أول شي يجي في بالك اول ماتسمع ساعة فاخرة؟ روليكس او ميقا؟
             #### في هذا الرسم البياني راح نستعرض لكم متوسط الأسعار لأغلى 5 براندات
         
              """)
