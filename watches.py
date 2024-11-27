@@ -75,20 +75,22 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Create 3 columns
 col1, col2, col3 = st.columns(3)
 
-# Column 1: Logo
+# Column 1: Logo with title
 with col1:
+    st.markdown("<h3 style='text-align: center; font-weight: bold;'>المصدر</h3>", unsafe_allow_html=True)
     st.image(logo_path, width=150)
     st.markdown(f"[للإطلاع]({url})", unsafe_allow_html=True)
 
-# Column 2: Watches text
+# Column 2: Watches text with title
 with col2:
-    st.markdown("<h4 style='text-align: center;'>40,000+<br>Watches</h4>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; font-weight: bold;'>حجم البيانات</h3>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center;'>40,000+<br>ساعة</h4>", unsafe_allow_html=True)
 
-# Column 3: Widgets in a 3x2 grid
+# Column 3: Widgets in a 3x2 grid with title
 with col3:
+    st.markdown("<h3 style='text-align: center; font-weight: bold;'>شكل البيانات</h3>", unsafe_allow_html=True)
     st.markdown("""
         <div class="grid-container">
             <div class="widget widget1">الحالة</div>
@@ -99,6 +101,7 @@ with col3:
             <div class="widget widget6">مادة السوار</div>
         </div>
     """, unsafe_allow_html=True)
+
 
 
 
