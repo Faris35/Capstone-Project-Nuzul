@@ -175,6 +175,7 @@ filtered_data = df[
 ]
 
 
+
 # Display available watches based on the selected filters
 st.subheader("الساعات المتوفرة:")
 filtered_data['price_range'] = filtered_data.groupby('model')['price_usd'].transform(lambda x: f"${x.min()} - ${x.max()}")
