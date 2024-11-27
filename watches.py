@@ -351,18 +351,16 @@ elif chart_option == "تحليل الأسعار حسب مادة السوار":
     st.plotly_chart(fig_bracelet_material_prices)
 
 elif chart_option == "متوسط الأسعار حسب الجنس":
-    # Calculate the median prices grouped by gender
-    gender_prices = df.groupby('sex')['price_usd'].median()
+    # Calculate the median price grouped by gender
+    gender_prices = df.groupby('sex')['price_usd'].median().reset_index()
+    gender_prices.rename(columns={'price_usd': 'median_price'}, inplace=True)
 
-    # Calculate the count of each gender for percentage distribution
-    gender_counts = df['sex'].value_counts()
+    # Calculate the count of watches by gender
+    gender_counts = df['sex'].value_counts().reset_index()
+    gender_counts.columns = ['sex', 'count']
 
-    # Create a DataFrame for the pie chart
-    gender_data = pd.DataFrame({
-        'sex': gender_prices.index,
-        'median_price': gender_prices.values,
-        'count': gender_counts.values
-    })
+    # Merge the median price and count data into a single DataFrame
+    gender_data = pd.merge(gender_counts, gender_prices, on='sex', how='left')
 
     # Calculate the percentage distribution
     gender_data['percentage'] = (gender_data['count'] / gender_data['count'].sum()) * 100
@@ -379,11 +377,12 @@ elif chart_option == "متوسط الأسعار حسب الجنس":
 
     # Customize the hover template
     fig.update_traces(
-        hovertemplate="<b>%{label}</b><br>عدد الساعات: %{value}<br>متوسط السعر: %{customdata[0]:,}$<br>النسبة: %{customdata[1]:.2f}%"
+        hovertemplate="<b>%{label}</b><br>عدد الساعات: %{value}<br>متوسط السعر: %{customdata[0]:,.0f}$<br>النسبة: %{customdata[1]:.2f}%"
     )
 
     # Display the pie chart in Streamlit
     st.plotly_chart(fig)
+
 
 
 
