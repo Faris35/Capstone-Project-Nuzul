@@ -15,7 +15,7 @@ with col1:
     st.write(' ')
 
 with col2:
-    st.image("zeina.png", width= 200)  # Display an image with a specific width
+    st.image("zeina.png", use_container_width=True)  # Display an image with a specific width
 
 with col3:
     st.write(' ')
@@ -196,8 +196,7 @@ fig2.update_traces(marker=dict(line=dict(width=1, color='black')))
 st.plotly_chart(fig2)
 
 
-st.image("feature.png",  use_column_width=True)  
-
+st.image("feature.png", use_container_width=True)
 
 # Create a dropdown menu for selecting the chart to display
 selected_brand = st.selectbox("اختر الماركة:", ["All Brands"] + list(df['brand'].unique()))
