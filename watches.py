@@ -6,6 +6,8 @@ import seaborn as sns  # For statistical data visualization
 import matplotlib.pyplot as plt  # For plotting charts
 from sklearn.preprocessing import LabelEncoder  # For encoding categorical variables
 import plotly.express as px  # For interactive visualizations
+import plotly.graph_objects as go  # For creating detailed plotly graphs
+from plotly.subplots import make_subplots  # For creating subplots
 import numpy as np  # For numerical computing
 
 # Displaying a logo or an image on the app
@@ -442,57 +444,35 @@ elif chart_option == "تحليل الأسعار حسب مادة السوار":
     st.plotly_chart(fig_bracelet_material_prices)
 
 elif chart_option == "متوسط الأسعار حسب الجنس":
-    # Calculate the median price grouped by gender
-    gender_prices = df.groupby('sex')['price_usd'].median().reset_index()
+    gender_stats = df.groupby('sex').agg({'price_usd': 'median', 'model': 'count'}).reset_index()
+    gender_stats.columns = ['sex', 'median_price', 'count']
 
-    # Create the pie chart for gender_prices
-    fig_gender_prices = px.pie(
-        gender_prices,
-        names='sex',
-        values='price_usd',
-        title="توزيع الأسعار حسب الجنس",
-        hover_data={'price_usd': ':.2f'},
-        labels={'sex': 'الجنس', 'price_usd': 'متوسط السعر بالدولار'}
+    # Create the dual-axis bar and line chart
+    fig_dual_axis = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Add bar chart for the number of watches
+    fig_dual_axis.add_trace(
+        go.Bar(x=gender_stats['sex'], y=gender_stats['count'], name='عدد الساعات', marker_color='blue'),
+        secondary_y=False,
     )
 
-    # Customize the hover template to show the average price
-    fig_gender_prices.update_traces(
-        hovertemplate="<b>%{label}</b><br>متوسط السعر: %{value}$"
+    # Add line chart for the median price
+    fig_dual_axis.add_trace(
+        go.Scatter(x=gender_stats['sex'], y=gender_stats['median_price'], name='متوسط السعر', marker_color='red', mode='lines+markers'),
+        secondary_y=True,
     )
 
-    # Display the pie chart in Streamlit
-    st.plotly_chart(fig_gender_prices)
+    # Update layout
+    fig_dual_axis.update_layout(
+        title_text="عدد الساعات ومتوسط السعر حسب الجنس",
+        xaxis_title="الجنس",
+        yaxis_title="عدد الساعات",
+        yaxis2_title="متوسط السعر بالدولار",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
 
-
-    # # Calculate the count of watches by gender
-    # gender_counts = df['sex'].value_counts().reset_index()
-    # gender_counts.columns = ['sex', 'count']
-
-    # # Merge the median price and count data into a single DataFrame
-    # gender_data = pd.merge(gender_counts, gender_prices, on='sex', how='left')
-
-    # # Calculate the percentage distribution
-    # gender_data['percentage'] = (gender_data['count'] / gender_data['count'].sum()) * 100
-
-    # # Create the pie chart
-    # fig = px.pie(
-    #     gender_data,
-    #     names='sex',
-    #     values='count',
-    #     title="توزيع الساعات حسب الجنس ومتوسط الأسعار",
-    #     hover_data={'price_usd': True, 'percentage': ':.2f'},
-    #     labels={'sex': 'الجنس', 'count': 'عدد الساعات'}
-    # )
-
-    # # Customize the hover template
-    # fig.update_traces(
-    #     hovertemplate="<b>%{label}</b><br>عدد الساعات: %{value}<br>متوسط السعر: %{customdata[0]:,.0f}$<br>النسبة: %{customdata[1]:.2f}%"
-    # )
-
-    # # Display the pie chart in Streamlit
-    # st.plotly_chart(fig)
-
-
+    # Render the dual-axis chart in Streamlit
+    st.plotly_chart(fig_dual_axis)
 
 
 # Additional insights section
