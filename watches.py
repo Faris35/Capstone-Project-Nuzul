@@ -196,7 +196,7 @@ fig2.update_traces(marker=dict(line=dict(width=1, color='black')))
 st.plotly_chart(fig2)
 
 
-st.image("feature.png", width= 200)  
+st.image("feature.png",  use_column_width=True)  
 
 
 # Create a dropdown menu for selecting the chart to display
