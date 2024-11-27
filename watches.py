@@ -264,7 +264,6 @@ elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     color='brand',
     hover_name='model',
     color_discrete_map=distinct_color_map,  # Apply the distinct color map
-    labels={'size_mm': 'الحجم (mm)', 'price_usd': 'السعر (دولار أمريكي)'}
     )
 
     fig_size_price_bubble.update_layout(
