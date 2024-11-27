@@ -190,29 +190,79 @@ selected_brand = st.selectbox("اختر الماركة لتحليل الأسعا
 model_prices = df[df['brand'] == selected_brand].groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
 st.bar_chart(model_prices)
 
+filtered_df = df[df['brand'] == selected_brand]
+
 # Movement Analysis
 st.markdown("### تحليل الأسعار حسب نوع الحركة:")
-movement_prices = df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
+movement_prices = filtered_df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
 st.bar_chart(movement_prices)
 
-# Case Material Analysis
+### Trend of Case Metarial ###
+st.markdown("##### في الرسم البياني التالي راح يظهر لنا عدد الساعات بناءً على نوع الهيكل المصنع منه الساعة على الى مر العقود الماضية. هذا الرسم البياني مع الرسم البياني في (تحليل الأسعار حسب مادة الساعة) راح يفيدك في اختيار المادة الاكثر طلباً والاكثر سعراً")
+st.markdown("### ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)")
+
+
+# Define the range of years
+start_year = 1900
+end_year = 2023
+
+# Further filter the DataFrame for the specified range of years
+filtered_df = filtered_df[(filtered_df['year_of_production'] >= start_year) & (filtered_df['year_of_production'] <= end_year)]
+
+# Create a new column for decade grouping
+filtered_df['decade'] = (filtered_df['year_of_production'] // 10) * 10
+
+# Count the number of watches for each case material by decade
+case_material_count = filtered_df.groupby(['decade', 'case_material']).size().reset_index(name='count')
+
+# Create the interactive line plot
+fig = px.line(case_material_count, 
+              x='decade', 
+              y='count', 
+              color='case_material', 
+              markers=True,
+              labels={'count': 'عدد الساعات بحسب نوع الهيكل', 'decade': 'عقد'})
+
+# Show the plot in Streamlit
+st.plotly_chart(fig)
+
+### end of Trend of Case Metarial ### 
+##########################
+
+# Select a specific year for price analysis
+selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", filtered_df['decade'].unique())
+
+# Filter the DataFrame for the selected year
+year_filtered_df = filtered_df[filtered_df['year_of_production'] == selected_year]
+
+# Price Analysis by Case Material
 st.markdown("### تحليل الأسعار حسب مادة الساعة:")
-case_material_prices = df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
+case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
+
+# Display the bar chart for price analysis
 st.bar_chart(case_material_prices)
+
+
+##########################
+
+# # Case Material Analysis
+# st.markdown("### تحليل الأسعار حسب مادة الساعة:")
+# case_material_prices = filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
+# st.bar_chart(case_material_prices)
 
 # Bracelet Material Analysis
 st.markdown("### تحليل الأسعار حسب مادة السوار:")
-bracelet_material_prices = df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
+bracelet_material_prices = filtered_df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
 st.bar_chart(bracelet_material_prices)
 
 # Condition Analysis
 st.markdown("### تحليل الأسعار حسب حالة الساعة:")
-condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
+condition_prices = filtered_df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
 st.bar_chart(condition_prices)
 
 # Gender and Price
 st.markdown("### متوسط الأسعار حسب الجنس:")
-gender_prices = df.groupby('sex')['price_usd'].median()
+gender_prices = filtered_df.groupby('sex')['price_usd'].median()
 st.bar_chart(gender_prices)
 
 # Additional Insights
