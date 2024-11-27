@@ -230,8 +230,30 @@ if chart_option == "تحليل الأسعار حسب حالة الساعة":
 
 elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     size_prices = df.groupby('size_mm')['price_usd'].median()
-    st.markdown("### تحليل الأسعار حسب حجم الساعة:")
-    st.line_chart(size_prices)
+    fig_size_price_bubble = px.scatter(
+        df,
+        x='size_mm',
+        y='price_usd',
+        size='price_usd',
+        color='brand',
+        hover_name='model',
+        title=f'الحجم والسعر للبراند {selected_brand}',
+        labels={'size_mm': 'الحجم (mm)', 'price_usd': 'السعر (دولار أمريكي)'}
+    )
+
+    # Update layout for improved appearance
+    fig_size_price_bubble.update_layout(
+        width=1500,
+        height=900,
+        title_font_size=35,
+        xaxis_title_font_size=35,
+        yaxis_title_font_size=35,
+        xaxis_tickfont_size=20,
+        yaxis_tickfont_size=20,
+        legend_title_font_size=20
+    )
+
+    st.plotly_chart(fig_size_price_bubble)
 
 elif chart_option == "تحليل الأسعار حسب سنوات التصنيع":
     yearly_prices = df.groupby('year_of_production')['price_usd'].median()
