@@ -354,19 +354,35 @@ elif chart_option == "متوسط الأسعار حسب الجنس":
     # Calculate the median prices grouped by gender
     gender_prices = df.groupby('sex')['price_usd'].median()
 
-    # Display the markdown title
-    st.markdown("### متوسط الأسعار حسب الجنس:")
+    # Calculate the count of each gender for percentage distribution
+    gender_counts = df['sex'].value_counts()
 
-    # Plot the bar chart
-    fig = px.bar(
-        gender_prices.reset_index(),
-        x='sex',
-        y='price_usd',
-        labels={'sex': 'الجنس', 'price_usd': 'متوسط السعر (دولار أمريكي)'},
-        title="متوسط الأسعار حسب الجنس"
+    # Create a DataFrame for the pie chart
+    gender_data = pd.DataFrame({
+        'sex': gender_prices.index,
+        'median_price': gender_prices.values,
+        'count': gender_counts.values
+    })
+
+    # Calculate the percentage distribution
+    gender_data['percentage'] = (gender_data['count'] / gender_data['count'].sum()) * 100
+
+    # Create the pie chart
+    fig = px.pie(
+        gender_data,
+        names='sex',
+        values='count',
+        title="توزيع الساعات حسب الجنس ومتوسط الأسعار",
+        hover_data={'median_price': True, 'percentage': ':.2f'},
+        labels={'sex': 'الجنس', 'count': 'عدد الساعات'}
     )
 
-    # Display the chart in Streamlit
+    # Customize the hover template
+    fig.update_traces(
+        hovertemplate="<b>%{label}</b><br>عدد الساعات: %{value}<br>متوسط السعر: %{customdata[0]:,}$<br>النسبة: %{customdata[1]:.2f}%"
+    )
+
+    # Display the pie chart in Streamlit
     st.plotly_chart(fig)
 
 
