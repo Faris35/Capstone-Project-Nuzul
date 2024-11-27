@@ -7,9 +7,18 @@ import matplotlib.pyplot as plt  # For plotting charts
 from sklearn.preprocessing import LabelEncoder  # For encoding categorical variables
 import plotly.express as px  # For interactive visualizations
 
-
 # Displaying a logo or an image on the app
-st.image("zeina.png", width=120)  # Display an image with a specific width
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.write(' ')
+
+with col2:
+    st.image("zeina.png", width= 200)  # Display an image with a specific width
+
+with col3:
+    st.write(' ')
+
 
 
 # Adding RTL (Right-to-Left) styling for Arabic content
@@ -122,6 +131,10 @@ movement_prices = filtered_df.groupby('movement')['price_usd'].median().sort_val
 st.markdown("### تحليل الأسعار حسب نوع الحركة:")
 st.bar_chart(movement_prices)
 
+## Trend of Case Metarial ###
+st.markdown("##### في الرسم البياني التالي راح يظهر لنا عدد الساعات بناءً على نوع الهيكل المصنع منه الساعة على الى مر العقود الماضية. هذا الرسم البياني مع الرسم البياني في (تحليل الأسعار حسب مادة الساعة) راح يفيدك في اختيار المادة الاكثر طلباً والاكثر سعراً")
+st.markdown("### ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)")
+
 # Filter dataset for specific year range and add a decade column
 start_year = 1900
 end_year = 2023
@@ -183,6 +196,8 @@ filtered_data = df[
     (df['year_of_production'] == year_of_production) &
     (df['condition'] == condition)
 ]
+
+
 
 # Display available watches based on the selected filters
 st.subheader("الساعات المتوفرة:")
