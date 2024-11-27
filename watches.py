@@ -224,17 +224,35 @@ chart_option = st.selectbox(
 
 # Display the selected chart
 if chart_option == "تحليل الأسعار حسب حالة الساعة":
-    condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
-    st.markdown("### تحليل الأسعار حسب حالة الساعة:")
-    st.bar_chart(condition_prices)
-    fig_condition_prices = px.bar(
-        condition_prices,
-        x=condition_prices.index,
-        y=condition_prices.values,
-        labels={'x': 'حالة الساعة', 'y': 'السعر بالدولار'},
-        title='تحليل الأسعار حسب حالة الساعة'
-    )
-    st.plotly_chart(fig_condition_prices)
+    if selected_brand != "All Brands":
+        # Group by 'condition' and 'model' for the selected brand
+        condition_model_prices = df.groupby(['condition', 'model'])['price_usd'].median().reset_index()
+
+        # Create a Sunburst chart with 'condition' and 'model' as hierarchical levels
+        fig = px.sunburst(
+            condition_model_prices,
+            path=['condition', 'model'],  # Hierarchical levels: Condition > Model
+            values='price_usd',          # Size of the segments
+            color='price_usd',           # Color based on price
+            color_continuous_scale='viridis',
+            title=f"تحليل الأسعار حسب حالة الساعة والموديلات للماركة: {selected_brand}",
+        )
+    else:
+        # Group by 'condition' and 'brand' for all brands
+        condition_brand_prices = df.groupby(['condition', 'brand'])['price_usd'].median().reset_index()
+
+        # Create a Sunburst chart with 'condition' and 'brand' as hierarchical levels
+        fig = px.sunburst(
+            condition_brand_prices,
+            path=['condition', 'brand'],  # Hierarchical levels: Condition > Brand
+            values='price_usd',          # Size of the segments
+            color='price_usd',           # Color based on price
+            color_continuous_scale='viridis',
+            title="تحليل الأسعار حسب حالة الساعة والماركة",
+        )
+
+    # Render the Plotly chart in Streamlit
+    st.plotly_chart(fig, use_container_width=True)
 
 elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     size_prices = df.groupby('size_mm')['price_usd'].median()
