@@ -227,6 +227,14 @@ if chart_option == "تحليل الأسعار حسب حالة الساعة":
     condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
     st.markdown("### تحليل الأسعار حسب حالة الساعة:")
     st.bar_chart(condition_prices)
+    fig_condition_prices = px.bar(
+        condition_prices,
+        x=condition_prices.index,
+        y=condition_prices.values,
+        labels={'x': 'حالة الساعة', 'y': 'السعر بالدولار'},
+        title='تحليل الأسعار حسب حالة الساعة'
+    )
+    st.plotly_chart(fig_condition_prices)
 
 elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     size_prices = df.groupby('size_mm')['price_usd'].median()
@@ -279,17 +287,38 @@ elif chart_option == "تحليل الأسعار حسب حجم الساعة":
 elif chart_option == "تحليل الأسعار حسب سنوات التصنيع":
     yearly_prices = df.groupby('year_of_production')['price_usd'].median()
     st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
-    st.line_chart(yearly_prices)
+    fig_yearly_prices = px.line(
+        yearly_prices,
+        x=yearly_prices.index,
+        y=yearly_prices.values,
+        labels={'x': 'سنة التصنيع', 'y': 'السعر بالدولار'},
+        title='تحليل الأسعار حسب سنوات التصنيع'
+    )
+    st.plotly_chart(fig_yearly_prices)
 
 elif chart_option == "تحليل الأسعار حسب الموديل":
     model_prices = df.groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
     st.markdown("### تحليل الأسعار حسب الموديل:")
-    st.bar_chart(model_prices)
+    fig_model_prices = px.bar(
+        model_prices,
+        x=model_prices.index,
+        y=model_prices.values,
+        labels={'x': 'الموديل', 'y': 'السعر بالدولار'},
+        title='تحليل الأسعار حسب الموديل'
+    )
+    st.plotly_chart(fig_model_prices)
 
 elif chart_option == "تحليل الأسعار حسب نوع الحركة":
     movement_prices = df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
     st.markdown("### تحليل الأسعار حسب نوع الحركة:")
-    st.bar_chart(movement_prices)
+    fig_movement_prices = px.bar(
+        movement_prices,
+        x=movement_prices.index,
+        y=movement_prices.values,
+        labels={'x': 'نوع الحركة', 'y': 'السعر بالدولار'},
+        title='تحليل الأسعار حسب نوع الحركة'
+    )
+    st.plotly_chart(fig_movement_prices)
 
 elif chart_option == "ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)":
     st.markdown("##### في هذا الرسم البياني راح يظهر لنا عدد الساعات بناءً على نوع الهيكل المصنع منه الساعة على مر العقود الماضية.")
@@ -312,12 +341,34 @@ elif chart_option == "ترند مواد تصنيع الهياكل حسب الع�
 elif chart_option == "تحليل الأسعار حسب مادة السوار":
     bracelet_material_prices = df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
     st.markdown("### تحليل الأسعار حسب مادة السوار:")
-    st.bar_chart(bracelet_material_prices)
+    fig_bracelet_material_prices = px.bar(
+        bracelet_material_prices,
+        x=bracelet_material_prices.index,
+        y=bracelet_material_prices.values,
+        labels={'x': 'مادة السوار', 'y': 'السعر بالدولار'},
+        title='تحليل الأسعار حسب مادة السوار'
+    )
+    st.plotly_chart(fig_bracelet_material_prices)
 
 elif chart_option == "متوسط الأسعار حسب الجنس":
+    # Calculate the median prices grouped by gender
     gender_prices = df.groupby('sex')['price_usd'].median()
+
+    # Display the markdown title
     st.markdown("### متوسط الأسعار حسب الجنس:")
-    st.bar_chart(gender_prices)
+
+    # Plot the bar chart
+    fig = px.bar(
+        gender_prices.reset_index(),
+        x='sex',
+        y='price_usd',
+        labels={'sex': 'الجنس', 'price_usd': 'متوسط السعر (دولار أمريكي)'},
+        title="متوسط الأسعار حسب الجنس"
+    )
+
+    # Display the chart in Streamlit
+    st.plotly_chart(fig)
+
 
 
 # Additional insights section
