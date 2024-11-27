@@ -310,7 +310,25 @@ elif chart_option == "تحليل الأسعار حسب الموديل":
 
 elif chart_option == "تحليل الأسعار حسب نوع الحركة":
     movement_prices = df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
-    st.markdown("### تحليل الأسعار حسب نوع الحركة:")
+    
+    st.markdown("""
+        <style>
+        .custom-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            font-weight: 400; /* Regular weight for better readability */
+            color: #444444; /* Neutral dark gray for both light and dark modes */
+            text-align: justify;
+            line-height: 1.8; /* Comfortable line spacing */
+            margin-bottom: 20px; /* Space below the text */
+        }
+        
+        </style>
+        <div class="custom-text">
+        تلعب حركة الساعة (نوع الميكانيكية التي تديرها) دورًا كبيرًا في تحديد قيمتها. في عالم الساعات الفاخرة، تختلف الأسعار بناءً على نوع الحركة، حيث يعكس ذلك تعقيد التصميم ومستوى الحرفية. يوضح الرسم البياني التالي متوسط أسعار الساعات حسب نوع الحركة:
+        </div>
+        """, unsafe_allow_html=True)
+
     fig_movement_prices = px.bar(
         movement_prices,
         x=movement_prices.index,
@@ -318,11 +336,42 @@ elif chart_option == "تحليل الأسعار حسب نوع الحركة":
         labels={'x': 'نوع الحركة', 'y': 'السعر بالدولار'},
         title='تحليل الأسعار حسب نوع الحركة'
     )
+    fig_movement_prices.update_layout(
+    xaxis_title="<b>نوع الحركة</b>",
+    yaxis_title="<b>السعر بالدولار</b>",
+    title_font=dict(size=18, family="Arial"),
+    xaxis=dict(
+        tickfont=dict(size=12, family="Arial", weight="bold",color="black")
+    ),
+    yaxis=dict(
+        tickfont=dict(size=12, family="Arial", weight="bold")
+    ))
     st.plotly_chart(fig_movement_prices)
 
 elif chart_option == "ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)":
-    st.markdown("##### في هذا الرسم البياني راح يظهر لنا عدد الساعات بناءً على نوع الهيكل المصنع منه الساعة على مر العقود الماضية.")
-    st.markdown("### ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)")
+    st.markdown("""
+        <style>
+        .custom-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            font-weight: 400; /* Regular weight for better readability */
+            color: #444444; /* Neutral dark gray for both light and dark modes */
+            text-align: justify;
+            line-height: 1.8; /* Comfortable line spacing */
+            margin-bottom: 20px; /* Space below the text */
+        }
+        .highlight {
+            color: #6D9DC5; /* Gold color to emphasize certain phrases */
+            font-weight: bold;
+        }
+        </style>
+        <div class="custom-text">
+        يعكس هذا الرسم البياني توزيع عدد الساعات حسب المادة المستخدمة في تصنيع هيكلها عبر العقود 
+        <span class="highlight">(1900-2023)</span>. يساعدنا هذا التحليل في تتبع التغيرات في تفضيلات مواد التصنيع بمرور الزمن 
+        وفهم الاتجاهات السائدة في سوق الساعات الفاخرة.
+        </div>
+        """, unsafe_allow_html=True)
+
     start_year = 1900
     end_year = 2023
     filtered_df = df[(df['year_of_production'] >= start_year) & (df['year_of_production'] <= end_year)]
