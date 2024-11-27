@@ -1,16 +1,16 @@
-# Import libraries
-import streamlit as st
-from PIL import Image
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import LabelEncoder
-import plotly.express as px
+# Import necessary libraries
+import streamlit as st  # Streamlit for building the interactive web app
+from PIL import Image  # To handle image loading and manipulation
+import pandas as pd  # For data manipulation and analysis
+import seaborn as sns  # For statistical data visualization
+import matplotlib.pyplot as plt  # For plotting charts
+from sklearn.preprocessing import LabelEncoder  # For encoding categorical variables
+import plotly.express as px  # For interactive visualizations
 
-st.image("zeina.png", width=120)
+# Displaying a logo or an image on the app
+st.image("zeina.png", width=120)  # Display an image with a specific width
 
-
-# Inject CSS for RTL
+# Adding RTL (Right-to-Left) styling for Arabic content
 rtl_css = """
 <style>
 body {
@@ -19,16 +19,15 @@ body {
 }
 </style>
 """
-st.markdown(rtl_css, unsafe_allow_html=True)
+st.markdown(rtl_css, unsafe_allow_html=True)  # Applying RTL style for Arabic alignment
 
-# Load data
-df = pd.read_csv('Final_version4_all_watches.csv')
+# Loading the dataset
+df = pd.read_csv('Final_version4_all_watches.csv')  # Load watch data; ensure file exists in the correct location
 
-# Title
+# Adding a catchy title to the app
 st.title('ساعتك مو للزينة بس تقدر تستثمر فيها، خلها زينة وخزينة!')
 
-# Introduction
-# TODO - rewrite the introduction
+# Adding a description and context for the app
 st.markdown("""
 فكرت تشتري ساعة غالية؟ يقولون الساعات الفخمة مو بس زينة، لكنها استثمار يرفع قيمتها مع الوقت.
 والمؤثرين يتكلمون عنها كأنها الذهب الجديد، لكن هل كلامهم صحيح؟
@@ -37,123 +36,37 @@ st.markdown("""
 تتوقع السوق مثل ما يقولون؟
 """)
 
-# User Segmentation
-# st.markdown("""
-# **أنت وش تفضل؟**
-# - إذا كنت **هاوي** تحب تجمع الساعات عشان شكلها وجمالها.
-# - أو كنت **مستثمر** تبحث عن عوائد مالية واستثمار ذكي.
-# """)
-
-# user_type = st.radio("اختر هدفك", ("هاوي", "مستثمر"))
-
-# Collector Flow
-# if user_type == "هاوي":
-#     st.subheader("للهواة: اكتشف أفضل الخيارات الجمالية!")
-    
-#     st.markdown("""
-#     للهواة، أهم شيء أنك تختار الساعة اللي تعكس شخصيتك وتناسب ذوقك. هنا بنقدم لك:
-#     - توزيع المواد (ذهب، فولاذ، بلاتين) وكيف تؤثر على شكل الساعة.
-#     - تحليل الأحجام والأنماط المناسبة (صغيرة أو كبيرة) لكل مناسبة.
-#     """)
-    
-#     # Material Distribution
-#     material_counts = df['case_material'].value_counts()
-#     st.markdown("### توزيع المواد الأكثر استخداماً:")
-#     st.bar_chart(material_counts)
-
-#     # Size Analysis
-#     st.markdown("### توزيع الأحجام (مم):")
-#     st.bar_chart(df['size_mm'].value_counts())
-
-# Investor Flow
-# elif user_type == "مستثمر":
-# st.subheader("للمستثمرين: اعرف أكثر عن السوق!")
-
-# st.markdown("""
-# للمستثمرين، نركز على العوائد المالية وكيف تختار الساعة المناسبة للاستثمار. 
-# - تعرف على الماركات اللي تحافظ على قيمتها أو تزيد مع الوقت.
-# - تابع الأسعار حسب حالة الساعة (جديدة أو مستعملة).
-# """)
-
-# # Condition Filter
-# condition = st.selectbox('اختر حالة الساعة', df['condition'].unique())
-# filtered_df = df[df['condition'] == condition]
-
-# Average Prices by Brand
-# TODO - Map it to Arabic
-# top_brands = filtered_df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
+# Calculate median price for top 10 watch brands
 top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
-# st.markdown("### متوسط الأسعار لأغلى عشر ماركات:")
-# st.bar_chart(top_brands)
+
+# Split the layout into two columns for better data presentation
 col1, col2 = st.columns(2)
 
 with col1:
+    # Add a description of the top brands
     st.markdown("""
     ### تدري وش الماركات اللي تتصدر أغلى الساعات بالعالم؟
     **ريتشارد ميل** متربعة على القمة بأسعارها العالية واللي تعكس ندرتها وفخامتها، تليها **باتيك فيليب** و**أوديمار بيغيه** كخيارات راقية ومميزة.  
     أما **رولكس**، فهي تقدم جودة عالية بفخامة وسعر أقل شوي مقارنة بالباقي.
     """)
+    # Display a bar chart for the median price of the top brands
     st.markdown("### متوسط الأسعار لأغلى عشر ماركات :")
     st.bar_chart(top_brands_all)
 
 with col2:
+    # Add insights about brand popularity
     st.markdown("""
     ### شفنا أغلى الماركات، لكن هنا الصورة تختلف:
     **رولكس** جمعت بين السعر المعقول والانتشار الأكبر.  
     **باتيك فيليب**، رغم أنها من الأغلى، إلا أنها برضو من الأكثر انتشاراً.  
     بينما **أوميغا** و**تاغ هوير** ركزت على الشعبية والجودة بسعر أقل.
     """)
-    # Calculate the frequency of each brand
+    # Display a bar chart for the most popular brands
     popular_brands = df['brand'].value_counts().head(10)
-
-    # Display the results in a bar chart
     st.markdown("### أكثر عشر ماركات انتشاراً:")
     st.bar_chart(popular_brands)
 
-# # Correlation between Price and rest of the features and put a drop down menu to select the brand
-# # Features to analyze
-# features = [
-#     'model', 'movement', 'case_material', 
-#     'bracelet_material', 'year_of_production', 
-#     'condition', 'sex', 'size_mm'
-# ]
-
-# # Streamlit header
-# st.markdown("### تحليل العلاقة بين الأسعار والمواصفات:")
-
-# # Select the brand
-# selected_brand = st.selectbox("اختر الماركة", df['brand'].unique())
-
-# # Filter the DataFrame based on the selected brand
-# brand_df = df[df['brand'] == selected_brand].copy()
-
-# # Encode non-numeric columns to numeric using LabelEncoder
-# label_encoders = {}
-# for feature in features:
-#     if brand_df[feature].dtype == 'object':
-#         le = LabelEncoder()
-#         brand_df[feature] = le.fit_transform(brand_df[feature].astype(str))
-#         label_encoders[feature] = le
-
-# # Select the numeric features
-# numeric_features = ['price_usd'] + features
-
-# # Compute the correlation matrix
-# correlation_matrix = brand_df[numeric_features].corr()
-
-# # Extracting just the first column (correlations with 'price_usd')
-# first_column_corr = correlation_matrix['price_usd'].to_frame()
-
-# # Plot the heatmap
-# fig, ax = plt.subplots()
-# sns.heatmap(first_column_corr, annot=True, cmap='coolwarm', fmt=".2f", ax=ax)
-# ax.set_title(f"Correlation Heatmap for {selected_brand}", fontsize=14)
-# st.pyplot(fig)
-
-####################
-
-# size Trends
-
+# Add a detailed markdown for data insights and analysis
 st.markdown("""
 بعد دراسة البيانات وخصائص الساعات، وصلنا لاستنتاج بأن أغلب الساعات تتأثر بالتالي:
 1. الحالة
@@ -165,110 +78,71 @@ st.markdown("""
 
 سنعرض الآن الرسوم البيانية للخصائص المذكورة ومدى تأثيرها على قيمة الساعات.
 """)
-# Condition Analysis
-st.markdown("""
-### تحليل الأسعار حسب حالة الساعة:
-- **غير مستخدمة (Unworn):** تتصدر القائمة لأن الساعات التي لم تُستخدم غالبًا ما تكون نادرة أو انقطعت من المتاجر، مما يجعلها مطلوبة بشدة ويرفع قيمتها بشكل كبير.  
-- **الجديدة (New):** تأتي في المرتبة الثانية، وتعكس اهتمام السوق بالساعات بحالتها الأصلية، لكنها أقل جاذبية من النادرة وغير المستخدمة.  
-- **حالة جيدة (Good) وجيدة جدًا (Very Good):** تمثل الساعات التي تم استخدامها ولكنها لا تزال تحتفظ بجودتها العالية، مما يجعلها خيارًا مناسبًا لمن يبحث عن التوفير مع الحفاظ على الجودة.
-""")
-st.markdown("### تحليل الأسعار حسب حالة الساعة:")
+
+# Median price based on watch condition
 condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
-st.bar_chart(condition_prices)
+st.markdown("### تحليل الأسعار حسب حالة الساعة:")
+st.bar_chart(condition_prices)  # Display a bar chart
 
-
-# Size Analysis
-st.markdown("### تحليل الأسعار حسب حجم الساعة:")
+# Median price based on size
 size_prices = df.groupby('size_mm')['price_usd'].median()
-st.line_chart(size_prices)
+st.markdown("### تحليل الأسعار حسب حجم الساعة:")
+st.line_chart(size_prices)  # Display a line chart
 
-# Yearly Trends
-st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
+# Median price over the years
 yearly_prices = df.groupby('year_of_production')['price_usd'].median()
-st.line_chart(yearly_prices)
+st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
+st.line_chart(yearly_prices)  # Display a line chart
 
-# Model Analysis
+# Allow users to select a brand for further analysis
 selected_brand = st.selectbox("اختر الماركة لتحليل الأسعار حسب الموديل:", df['brand'].unique())
 model_prices = df[df['brand'] == selected_brand].groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
-st.bar_chart(model_prices)
+st.bar_chart(model_prices)  # Display a bar chart for models of the selected brand
 
+# Filter data for the selected brand
 filtered_df = df[df['brand'] == selected_brand]
 
-# Movement Analysis
-st.markdown("### تحليل الأسعار حسب نوع الحركة:")
+# Median price based on movement type
 movement_prices = filtered_df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
+st.markdown("### تحليل الأسعار حسب نوع الحركة:")
 st.bar_chart(movement_prices)
 
-### Trend of Case Metarial ###
-st.markdown("##### في الرسم البياني التالي راح يظهر لنا عدد الساعات بناءً على نوع الهيكل المصنع منه الساعة على الى مر العقود الماضية. هذا الرسم البياني مع الرسم البياني في (تحليل الأسعار حسب مادة الساعة) راح يفيدك في اختيار المادة الاكثر طلباً والاكثر سعراً")
-st.markdown("### ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)")
-
-
-# Define the range of years
+# Filter dataset for specific year range and add a decade column
 start_year = 1900
 end_year = 2023
-
-# Further filter the DataFrame for the specified range of years
 filtered_df = filtered_df[(filtered_df['year_of_production'] >= start_year) & (filtered_df['year_of_production'] <= end_year)]
+filtered_df['decade'] = (filtered_df['year_of_production'] // 10) * 10  # Group by decade
 
-# Create a new column for decade grouping
-filtered_df['decade'] = (filtered_df['year_of_production'] // 10) * 10
-
-# Count the number of watches for each case material by decade
+# Analyze the number of watches based on case material per decade
 case_material_count = filtered_df.groupby(['decade', 'case_material']).size().reset_index(name='count')
+fig = px.line(
+    case_material_count,
+    x='decade',
+    y='count',
+    color='case_material',
+    markers=True,
+    labels={'count': 'عدد الساعات بحسب نوع الهيكل', 'decade': 'عقد'}
+)
+st.plotly_chart(fig)  # Interactive line chart for decade-wise data
 
-# Create the interactive line plot
-fig = px.line(case_material_count, 
-              x='decade', 
-              y='count', 
-              color='case_material', 
-              markers=True,
-              labels={'count': 'عدد الساعات بحسب نوع الهيكل', 'decade': 'عقد'})
-
-# Show the plot in Streamlit
-st.plotly_chart(fig)
-
-### end of Trend of Case Metarial ### 
-##########################
-
-# Select a specific year for price analysis
+# Allow users to select a year and analyze case materials
 selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", filtered_df['decade'].unique())
-
-# Filter the DataFrame for the selected year
 year_filtered_df = filtered_df[filtered_df['year_of_production'] == selected_year]
-
-# Price Analysis by Case Material
-st.markdown("### تحليل الأسعار حسب مادة الساعة:")
 case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
-
-# Display the bar chart for price analysis
+st.markdown("### تحليل الأسعار حسب مادة الساعة:")
 st.bar_chart(case_material_prices)
 
-
-##########################
-
-# # Case Material Analysis
-# st.markdown("### تحليل الأسعار حسب مادة الساعة:")
-# case_material_prices = filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
-# st.bar_chart(case_material_prices)
-
-# Bracelet Material Analysis
-st.markdown("### تحليل الأسعار حسب مادة السوار:")
+# Median price based on bracelet material
 bracelet_material_prices = filtered_df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
+st.markdown("### تحليل الأسعار حسب مادة السوار:")
 st.bar_chart(bracelet_material_prices)
 
-# Condition Analysis
-st.markdown("### تحليل الأسعار حسب حالة الساعة:")
-condition_prices = filtered_df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
-st.bar_chart(condition_prices)
-
-# Gender and Price
-st.markdown("### متوسط الأسعار حسب الجنس:")
+# Median price based on gender
 gender_prices = filtered_df.groupby('sex')['price_usd'].median()
+st.markdown("### متوسط الأسعار حسب الجنس:")
 st.bar_chart(gender_prices)
 
-# Additional Insights
-# TODO - Add more insights and visualizations 
+# Additional insights section
 st.subheader("نقاط إضافية مهمة")
 st.markdown("""
 - متوسط الأسعار يختلف بين الساعات الرجالية والنسائية بشكل ملحوظ.
@@ -276,9 +150,7 @@ st.markdown("""
 - حالة الساعة (جديدة، مستعملة) لها تأثير مباشر على قيمتها.
 """)
 
-# TODO - Add section for the user to input features and get the df of the watches that match the features
-# we will show him the models that match his features and the price of each model
-# User Input
+# Interactive filters for watch specifications
 st.header("اختر مواصفات الساعة:")
 brand = st.selectbox("البراند", df['brand'].unique())
 movement = st.selectbox("نوع الحركة", df[df['brand'] == brand]['movement'].unique())
@@ -287,7 +159,7 @@ bracelet_material = st.selectbox("مادة السوار", df[(df['brand'] == bra
 year_of_production = st.selectbox("سنة التصنيع", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material)]['year_of_production'].unique())
 condition = st.selectbox("حالة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material) & (df['year_of_production'] == year_of_production)]['condition'].unique())
 
-# Filter the DataFrame
+# Filter data based on selected criteria
 filtered_data = df[
     (df['brand'] == brand) &
     (df['movement'] == movement) &
@@ -297,154 +169,8 @@ filtered_data = df[
     (df['condition'] == condition)
 ]
 
-# Show the filtered DataFrame
+# Display available watches based on the selected filters
 st.subheader("الساعات المتوفرة:")
-#st.write(filtered_data.drop(columns=['brand', 'movement', 'case_material', 'bracelet_material', 'year_of_production', 'condition']))
-# Add a column for price range for each model within the filtered DataFrame
 filtered_data['price_range'] = filtered_data.groupby('model')['price_usd'].transform(lambda x: f"${x.min()} - ${x.max()}")
 filtered_data = filtered_data.drop_duplicates(subset=['model'])
-st.write(filtered_data[['model', 'price_range']])
-
-# Conclusion and Recommendations
-# TODO - Rewrite the recommendations
-
-
-
-st.markdown("""
-الآن بعد ما وضحت لك الصورة أكثر وشفت الماركات اللي لها احتمالية عالية إنك تستفيد منها، صار عندك الخيار تتصفح الماركات وتشوف تفاصيل أكثر عن تأثير الخصائص عليها.
-""")
-
-column_names_mapping = {
-    'model': 'الموديل',
-    'movement': 'نوع الحركة',
-    'case_material': 'مادة الساعة',
-    'bracelet_material': 'مادة السوار',
-    'year_of_production': 'سنة الإنتاج',
-    'condition': 'الحالة',
-    'sex': 'الجنس',
-    'size_mm': 'الحجم (مم)',
-    'price_usd': 'السعر بالدولار'
-}
-
-st.markdown("""
-بعد دراسة البيانات وخصائص الساعات، وصلنا لاستنتاج بأن أغلب الساعات تتأثر بالتالي:
-1. الحجم
-2. سنة التصنيع
-3. الموديل
-4. نوع الحركة
-5. مادة السوار
-
-سنعرض الآن الرسوم البيانية للخصائص المذكورة ومدى تأثيرها على قيمة الساعات.
-""")
-brand_options = ['All'] + top_brands_all.index.tolist()
-
-# Create a dropdown menu for brand selection
-brand_filter = st.selectbox('اختر البراند', brand_options)
-
-# Filter the dataframe based on the selected brand or 'All'
-if brand_filter != "All":
-    filtered_df = df[df['brand'] == brand_filter]
-else:
-    filtered_df = df
-
-# 1. الحجم (Size) 
-st.markdown("##### تحليل تأثير الحجم على السعر:")
-st.markdown("""
-في هذا الرسم البياني، نلاحظ العلاقة بين حجم الساعة وسعرها. 
-هل هناك علاقة بين الحجم والسعر؟ هل الساعات الأكبر حجمًا أغلى عادة؟
-خلنا نكتشف من خلال الرسم البياني.
-""")
-fig_size_price_bubble = px.scatter(filtered_df, x='size_mm', y='price_usd', size='price_usd',
-                                   color='brand', hover_name='model',
-                                   title=f'الحجم والسعر للبراند {brand_filter}', 
-                                   labels={'size_mm': 'الحجم (mm)', 'price_usd': 'السعر (دولار أمريكي)'})
-st.plotly_chart(fig_size_price_bubble)
-st.markdown("""
-كما يظهر في الرسم البياني، في أغلب الحالات، يزداد السعر مع زيادة الحجم. 
-هذا يعني أن هناك علاقة طردية بين حجم الساعة وسعرها.
-""")
-
-# 2. سنة التصنيع (Year of Production) - Line chart
-st.markdown("#### تحليل تأثير سنة التصنيع على السعر:")
-st.markdown("""
-هنا راح نشوف إذا كان سنة التصنيع لها تأثير على السعر. 
-هل الساعات القديمة أغلى؟ ولا الساعات الحديثة هي الأغلى؟ خلونا نكتشف.
-""")
-yearly_prices = filtered_df.groupby('year_of_production')['price_usd'].mean()
-st.markdown(f"تحليل اختلاف الاسعار على حسب سنة الصنع {brand_filter}")
-st.line_chart(yearly_prices)
-
-st.markdown("""
-من الرسم البياني نقدر نشوف أن الساعات الحديثة عمومًا أغلى، لكن في بعض الساعات القديمة لها قيمة عالية جدا.
-""")
-
-# 3. الموديل (Model) - Best model regarding the highest price
-
-st.markdown("#### تحليل الموديلات الأفضل من حيث السعر:")
-st.markdown("""
-في هذا التحليل، بنشوف أفضل الموديلات اللي تحقق أعلى أسعار.
-نتعرف على الموديلات اللي تستحق استثمارك.
-""")
-top_models = filtered_df.groupby('model')['price_usd'].mean().sort_values(ascending=False).head(10)
-fig_model = px.bar(top_models, x=top_models.index, y=top_models.values, 
-                   title=f'أفضل موديلات حسب السعر للبراند {brand_filter}', 
-                   labels={'x': 'الموديل', 'y': 'متوسط السعر (دولار أمريكي)'})
-st.plotly_chart(fig_model)
-st.markdown("""
-من خلال الرسم البياني، نلاحظ أن بعض الموديلات تحقق أسعار أعلى بكثير من غيرها. 
-الموديلات النادرة هي اللي تسجل أعلى الأسعار.
-""")
-
-# 4. نوع الحركة (Movement Type) - Best movement type regarding the highest price
-st.markdown("#### تحليل نوع الحركة وتأثيره على السعر:")
-st.markdown("""
-هنا بنحلل تأثير نوع الحركة على سعر الساعة. 
-هل الساعات ذات الحركة المعقدة أغلى؟ دعونا نكتشف مع الرسم البياني.
-""")
-top_movements = filtered_df.groupby('movement')['price_usd'].mean().sort_values(ascending=False).head(10)
-fig_movement = px.bar(top_movements, x=top_movements.index, y=top_movements.values, 
-                      title=f'أفضل أنواع الحركة حسب السعر للبراند {brand_filter}', 
-                      labels={'x': 'نوع الحركة', 'y': 'متوسط السعر (دولار أمريكي)'})
-st.plotly_chart(fig_movement)
-st.markdown("""
-من الرسم البياني نلاحظ أن الحركة المعقدة أو المتطورة عمومًا تؤدي إلى رفع السعر.
-إذا كنت تدور على ساعة فاخرة، فكر في الحركة اللي تحتها!
-""")
-
-# 5. مادة السوار (Bracelet Material) - Best bracelet material regarding the highest price
-st.markdown("##### تحليل مادة السوار وتأثيرها على السعر:")
-st.markdown("""
-في هذا التحليل، راح نشوف إذا كان نوع السوار له تأثير على السعر. 
-هل الساعات المصنوعة من مواد مثل الذهب أغلى؟ خلونا نكتشف.
-""")
-top_bracelet_materials = filtered_df.groupby('bracelet_material')['price_usd'].mean().sort_values(ascending=False).head(10)
-fig_bracelet_material = px.bar(top_bracelet_materials, x=top_bracelet_materials.index, y=top_bracelet_materials.values, 
-                               title=f'أفضل مواد السوار حسب السعر للبراند {brand_filter}', 
-                               labels={'x': 'مادة السوار', 'y': 'متوسط السعر (دولار أمريكي)'})
-st.plotly_chart(fig_bracelet_material)
-st.markdown("""
-من خلال الرسم البياني نقدر نلاحظ أن بعض المواد مثل الذهب والفولاذ هي اللي ترفع الأسعار.
-إذا كنت تبغى استثمار حقيقي، يمكن المواد هذه تكون اختيارك.
-""")
-
-
-st.markdown("#### توصيات أخيرة:")
-st.markdown("""
-بعد ما استعرضنا تأثير الخصائص المختلفة على سعر الساعات، نحب نشارك معك بعض التوصيات التي يمكن أن تساعدك في اتخاذ القرار الأفضل للاستثمار:
-""")
-st.markdown("""
-1. **اختيار الماركات الشهيرة:**
-   - إذا كنت تبحث عن استثمار طويل الأمد، اختيار الماركات العالمية المعروفة هو الخيار الأفضل، حيث أن هذه الماركات تحافظ على قيمتها أو تزيد بمرور الوقت. وأيضًا، **Richard Mille** تعد من أعلى الماركات من حيث الأسعار، حيث أن الساعات منها تعتبر من الاستثمارات المربحة نظرًا لندرتها وتفرد تصاميمها.
-
-2. **الحجم مهم:** 
-   - بشكل عام، الساعات الأكبر حجمًا قد تكون أغلى، لكن هذا ليس قاعدة ثابتة. راجع الموديلات بحذر وركز على سمعة الماركة.
-
-3. **سنة التصنيع:** 
-   - الساعات الحديثة تكون غالبًا أغلى، لكنها أيضًا تحافظ على قيمتها بمرور الوقت. بعض الساعات القديمة قد تملك قيمة كبيرة إذا كانت نادرة أو مشهورة.
-
-4. **الموديلات النادرة:** 
-   - بعض الموديلات تكون أكثر قيمة من غيرها بسبب ندرتها أو خصوصيتها. إذا كنت مهتمًا بالاستثمار، حاول دائمًا البحث عن الموديلات المميزة التي تتمتع بشعبية.
-            
-5. **نوع الحركة والمادة:** 
-   - كلما كانت الحركة معقدة وأكثر تطورًا، كلما ارتفع السعر. أيضًا، المواد الفاخرة مثل **الذهب الوردي**، **البلاتين**، **الذهب الأبيض**، و **السيراميك** تساهم في رفع السعر بشكل كبير. هذه المواد تضيف قيمة كبيرة للساعة بسبب ندرتها وجودتها العالية.
-""")
+st.write(filtered_data[['model', 'price_range']])  # Display filtered watch details
