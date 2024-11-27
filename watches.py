@@ -49,21 +49,29 @@ st.markdown("""
 url = "https://www.chrono24.com/"
 logo_path = "./logo-positive-reduced.svg"
 
-# Custom CSS for smaller widgets
+# Custom CSS for subtle-colored widgets in a 3x2 grid
 st.markdown("""
     <style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr; /* Three columns */
+        gap: 10px; /* Spacing between grid items */
+    }
     .widget {
-        display: block;
-        margin: 3px 0;
-        padding: 5px;
-        border-radius: 6px;
+        padding: 10px;
+        border-radius: 8px;
         font-size: 14px;
         color: black;
         text-align: center;
         font-weight: bold;
-        background-color: #f0f0f0;
         cursor: pointer;
     }
+    .widget1 { background-color: #D9F2E6; }  /* Soft Green */
+    .widget2 { background-color: #D9EAFB; }  /* Soft Blue */
+    .widget3 { background-color: #FFF4CC; }  /* Soft Yellow */
+    .widget4 { background-color: #FFDAD5; }  /* Soft Orange */
+    .widget5 { background-color: #E8D9F2; }  /* Soft Purple */
+    .widget6 { background-color: #EAE4D9; }  /* Soft Brown */
     </style>
 """, unsafe_allow_html=True)
 
@@ -77,16 +85,21 @@ with col1:
 
 # Column 2: Watches text
 with col2:
-    st.markdown("<h4 style='text-align: center;'>40,000+<br>ساعة</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center;'>40,000+<br>Watches</h4>", unsafe_allow_html=True)
 
-# Column 3: Smaller Arabic widgets
+# Column 3: Widgets in a 3x2 grid
 with col3:
-    st.markdown('<div class="widget">الحالة</div>', unsafe_allow_html=True)
-    st.markdown('<div class="widget">الحجم</div>', unsafe_allow_html=True)
-    st.markdown('<div class="widget">سنة التصنيع</div>', unsafe_allow_html=True)
-    st.markdown('<div class="widget">الموديل</div>', unsafe_allow_html=True)
-    st.markdown('<div class="widget">نوع الحركة</div>', unsafe_allow_html=True)
-    st.markdown('<div class="widget">مادة السوار</div>', unsafe_allow_html=True)
+    st.markdown("""
+        <div class="grid-container">
+            <div class="widget widget1">الحالة</div>
+            <div class="widget widget2">الحجم</div>
+            <div class="widget widget3">سنة التصنيع</div>
+            <div class="widget widget4">الموديل</div>
+            <div class="widget widget5">نوع الحركة</div>
+            <div class="widget widget6">مادة السوار</div>
+        </div>
+    """, unsafe_allow_html=True)
+
 
 
 st.markdown("#### هل سوق الساعات في نمو مستمر؟")
@@ -94,69 +107,8 @@ st.markdown("#### هل سوق الساعات في نمو مستمر؟")
 st.markdown(""" تم تقييم حجم سوق الساعات الفاخرة بحوالي 42.9 مليار دولار أمريكي في عام 2022. ومن المتوقع أن ينمو سوق الساعات الفاخرة من 45.1 مليار دولار أمريكي في عام 2023 إلى 68.2 مليار دولار أمريكي بحلول عام 2032، مع معدل نمو سنوي مركب قدره 5.30% خلال فترة التوقعات (2023 - 2032). ومن العوامل الرئيسية التي تدفع السوق هي الزيادة في اتجاه ارتداء البالغين للساعات الفاخرة كرمز للمكانة الاجتماعية.
 المصدر: [Market Research Future](https://www.marketresearchfuture.com/reports/luxury-watch-market-10897) """)
 
-#st.image("./Global_Luxury_Watch_Market.jpg",width=500)
+st.image("./Global_Luxury_Watch_Market.jpg",width=500)
 
-# Data for the Luxury Watch Market
-# years = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2030, 2031, 2032]
-# market_sizes = [15, 20, 30, 42.9, 45.1, 50, 55, 60, 65, 68.2, 68.2, 68.2]
-
-import plotly.graph_objects as go
-import json
-
-# # Create the bar chart
-# fig = go.Figure()
-# fig.add_trace(go.Bar(
-
-#     x=years,
-
-#     y=market_sizes,
-
-#     marker_color='red',
-
-#     name="Market Size (USD Bn)"
-
-# ))
-
-# # Update the layout
-# fig.update_layout(
-
-#     title="Luxury Watch Market",
-
-#     xaxis_title="Year",
-
-#     yaxis_title="Market Size in USD Bn",
-
-#     template="plotly_white",
-
-#     font=dict(size=14),
-
-#     showlegend=False
-
-# )
-with open("luxury_watch_market.json", "r") as file:
-    fig = go.Figure(json.load(file))
-
-# Display the chart in the Streamlit app
-st.plotly_chart(fig)
-
-# Create the bar chart using Plotly Express
-# fig = px.bar(
-#     x=years,
-#     y=market_sizes,
-#     labels={'x': 'Year', 'y': 'Market Size in USD Bn'},
-#     title="Luxury Watch Market",
-#     color_discrete_sequence=['red']
-# )
-
-# # Update the layout
-# fig.update_layout(
-#     template="plotly_white",
-#     font=dict(size=14),
-#     showlegend=False
-# )
-
-# # Display the chart in Streamlit
-# st.plotly_chart(fig)
 
 
 
