@@ -10,6 +10,7 @@ import plotly.express as px  # For interactive visualizations
 # Displaying a logo or an image on the app
 st.image("zeina.png", width=120)  # Display an image with a specific width
 
+
 # Adding RTL (Right-to-Left) styling for Arabic content
 rtl_css = """
 <style>
