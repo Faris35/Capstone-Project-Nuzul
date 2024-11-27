@@ -354,6 +354,7 @@ elif chart_option == "متوسط الأسعار حسب الجنس":
     # Calculate the median price grouped by gender
     gender_prices = df.groupby('sex')['price_usd'].median().reset_index()
     gender_prices.rename(columns={'price_usd': 'median_price'}, inplace=True)
+    st.write(gender_prices['median_price'][:3])
 
     # Calculate the count of watches by gender
     gender_counts = df['sex'].value_counts().reset_index()
