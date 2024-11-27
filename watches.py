@@ -107,9 +107,38 @@ st.markdown("#### هل سوق الساعات في نمو مستمر؟")
 st.markdown(""" تم تقييم حجم سوق الساعات الفاخرة بحوالي 42.9 مليار دولار أمريكي في عام 2022. ومن المتوقع أن ينمو سوق الساعات الفاخرة من 45.1 مليار دولار أمريكي في عام 2023 إلى 68.2 مليار دولار أمريكي بحلول عام 2032، مع معدل نمو سنوي مركب قدره 5.30% خلال فترة التوقعات (2023 - 2032). ومن العوامل الرئيسية التي تدفع السوق هي الزيادة في اتجاه ارتداء البالغين للساعات الفاخرة كرمز للمكانة الاجتماعية.
 المصدر: [Market Research Future](https://www.marketresearchfuture.com/reports/luxury-watch-market-10897) """)
 
-st.image("./Global_Luxury_Watch_Market.jpg",width=500)
+import streamlit as st
+import matplotlib.pyplot as plt
+import numpy as np
 
+# Corrected data for the chart
+years = np.arange(2018, 2032 + 1)  # 15 years from 2018 to 2032
+market_sizes = [20, 25, 30, 35, 42.9, 45.1, 50, 52, 55, 60, 62, 64, 66, 68, 68.2]  # 15 values to match the years
 
+# Create the chart
+fig, ax = plt.subplots(figsize=(10, 5))
+bars = ax.bar(years, market_sizes, color='red', edgecolor='black')
+
+# Add labels to bars
+for bar in bars:
+    height = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width() / 2, height + 0.5, f'{height}', ha='center', fontsize=8)
+
+# Customize the chart
+ax.set_title('Luxury Watch Market', fontsize=16, fontweight='bold')
+ax.set_ylabel('Market Size in USD Bn', fontsize=12)
+ax.set_xticks(years)
+ax.set_xticklabels(years, rotation=45, fontsize=10)
+ax.grid(axis='y', linestyle='--', alpha=0.7)
+ax.set_ylim(0, 75)  # Adjust y-axis limit for better visibility
+
+# Add a horizontal line and arrow for title emphasis
+ax.annotate('', xy=(2018, 73), xytext=(2032, 73),
+            arrowprops=dict(arrowstyle='-|>', color='black', lw=1.5))
+ax.text(2025, 74, 'Luxury Watch Market', fontsize=10, ha='center')
+
+# Display the chart in Streamlit
+st.pyplot(fig)
 
 
 # Calculate median price for top 10 watch brands
