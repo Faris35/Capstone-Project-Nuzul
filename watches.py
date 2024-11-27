@@ -159,7 +159,7 @@ with col1:
     أما **رولكس**، فهي تقدم جودة عالية بفخامة وسعر أقل شوي مقارنة بالباقي.
     """)
     # Display a bar chart for the median price of the top brands
-    st.markdown("### متوسط الأسعار لأغلى 5 ماركات:")
+    st.markdown("### أغلى 5 ماركات:")
     st.bar_chart(top_brands_all)
 
 with col2:
