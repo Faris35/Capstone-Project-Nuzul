@@ -224,17 +224,53 @@ chart_option = st.selectbox(
 
 # Display the selected chart
 if chart_option == "تحليل الأسعار حسب حالة الساعة":
-    condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
-    st.markdown("### تحليل الأسعار حسب حالة الساعة:")
-    st.bar_chart(condition_prices)
-    fig_condition_prices = px.bar(
-        condition_prices,
-        x=condition_prices.index,
-        y=condition_prices.values,
-        labels={'x': 'حالة الساعة', 'y': 'السعر بالدولار'},
-        title='تحليل الأسعار حسب حالة الساعة'
-    )
-    st.plotly_chart(fig_condition_prices)
+    if selected_brand != "All Brands":
+        # Filter the data for the selected brand
+        filtered_data = df[df['brand'] == selected_brand].copy()
+
+        # Add year_of_production to model for display
+        filtered_data['model_with_year'] = filtered_data['model'] + " (" + filtered_data['year_of_production'].astype(str) + ")"
+
+        # Group by 'condition' and 'model_with_year'
+        condition_model_prices = filtered_data.groupby(['condition', 'model_with_year'])['price_usd'].median().reset_index()
+
+        # Limit to top 20 models by median price
+        top_models = (
+            condition_model_prices
+            .groupby('model_with_year')['price_usd']
+            .median()
+            .sort_values(ascending=False)
+            .head(20)
+            .index
+        )
+        condition_model_prices = condition_model_prices[condition_model_prices['model_with_year'].isin(top_models)]
+
+        # Create a Sunburst chart with 'condition' and 'model_with_year' as hierarchical levels
+        fig = px.sunburst(
+            condition_model_prices,
+            path=['condition', 'model_with_year'],  # Hierarchical levels: Condition > Model (with year)
+            values='price_usd',                     # Size of the segments
+            color='price_usd',                      # Color based on price
+            color_continuous_scale='viridis',
+            title=f"تحليل الأسعار حسب حالة الساعة والموديلات (مع سنة التصنيع) للماركة: {selected_brand}",
+        )
+    else:
+        # Group by 'condition' and 'brand' for all data
+        condition_brand_prices = df.groupby(['condition', 'brand'])['price_usd'].median().reset_index()
+
+        # Create a Sunburst chart with 'condition' and 'brand' as hierarchical levels
+        fig = px.sunburst(
+            condition_brand_prices,
+            path=['condition', 'brand'],  # Hierarchical levels: Condition > Brand
+            values='price_usd',          # Size of the segments
+            color='price_usd',           # Color based on price
+            color_continuous_scale='viridis',
+            title="تحليل الأسعار حسب حالة الساعة والماركة",
+        )
+
+    # Render the Plotly chart in Streamlit
+    st.plotly_chart(fig, use_container_width=True)
+
 
 elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     size_prices = df.groupby('size_mm')['price_usd'].median()
@@ -307,6 +343,8 @@ elif chart_option == "تحليل الأسعار حسب الموديل":
         title='تحليل الأسعار حسب الموديل'
     )
     st.plotly_chart(fig_model_prices)
+    st.markdown("الساعات زي ريتشارد ميل تتميز بموادها الفريدة وتصاميمها المبتكرة اللي تجمع بين الخفة والمتانة، عشان كذا أسعارها مرتفعة.")
+    st.markdown("بالذات موديلات مثل RM 055 وRM 035 غالية لأنها مصنوعة من كربون TPT، وتعاونهم مع رياضيين كبار زي نادال يرفع قيمتها أكثر.")
 
 elif chart_option == "تحليل الأسعار حسب نوع الحركة":
     movement_prices = df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
@@ -347,6 +385,10 @@ elif chart_option == "تحليل الأسعار حسب نوع الحركة":
         tickfont=dict(size=12, family="Arial", weight="bold")
     ))
     st.plotly_chart(fig_movement_prices)
+    st.markdown('من الرسم البياني يوضح لك إن الساعات اللي بحركة يدوية (manual winding) وأوتوماتيكية (automatic) هي الأغلى، لأنها تعكس الحرفية العالية والجودة في التصميم.')
+
+ 
+
 
 elif chart_option == "ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)":
     st.markdown("""
