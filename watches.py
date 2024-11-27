@@ -10,6 +10,18 @@ import plotly.express as px  # For interactive visualizations
 # Set Streamlit to wide mode
 st.set_page_config(layout="wide")
 
+st.markdown(
+    """
+    <style>
+    /* Apply justification to all markdown text */
+    .stMarkdown p {
+        text-align: justify;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Displaying a logo or an image on the app
 col1, col2, col3 = st.columns(3)
 
