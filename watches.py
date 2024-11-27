@@ -50,7 +50,7 @@ st.markdown("""
 url = "https://www.chrono24.com/"
 logo_path = "./logo-positive-reduced.svg"
 
-# Custom CSS for subtle-colored widgets in a 3x2 grid
+# Custom CSS for subtle-colored widgets in a 3x3 grid
 st.markdown("""
     <style>
     .grid-container {
@@ -73,6 +73,9 @@ st.markdown("""
     .widget4 { background-color: #FFDAD5; }  /* Soft Orange */
     .widget5 { background-color: #E8D9F2; }  /* Soft Purple */
     .widget6 { background-color: #EAE4D9; }  /* Soft Brown */
+    .widget7 { background-color: #F2D9D9; }  /* Soft Pink */
+    .widget8 { background-color: #D9F2F0; }  /* Soft Teal */
+    .widget9 { background-color: #F2E6D9; }  /* Soft Beige */
     </style>
 """, unsafe_allow_html=True)
 
@@ -89,7 +92,7 @@ with col2:
     st.markdown("<h3 style='text-align: center; font-weight: bold;'>حجم البيانات</h3>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align: center;'>40,000+<br>ساعة</h4>", unsafe_allow_html=True)
 
-# Column 3: Widgets in a 3x2 grid with title
+# Column 3: Widgets in a 3x3 grid with title
 with col3:
     st.markdown("<h3 style='text-align: center; font-weight: bold;'>شكل البيانات</h3>", unsafe_allow_html=True)
     st.markdown("""
@@ -100,11 +103,11 @@ with col3:
             <div class="widget widget4">الموديل</div>
             <div class="widget widget5">نوع الحركة</div>
             <div class="widget widget6">مادة السوار</div>
+            <div class="widget widget7">السعر</div>
+            <div class="widget widget8">رجالي/نسائي</div>
+            <div class="widget widget9">رقم مرجعي</div>
         </div>
     """, unsafe_allow_html=True)
-
-
-
 
 st.markdown("#### هل سوق الساعات في نمو مستمر؟")
 
