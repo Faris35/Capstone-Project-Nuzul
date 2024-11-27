@@ -196,22 +196,10 @@ fig2.update_traces(marker=dict(line=dict(width=1, color='black')))
 st.plotly_chart(fig2)
 
 
-# Add a detailed markdown for data insights and analysis
-st.markdown("""
-بعد دراسة البيانات وخصائص الساعات، وصلنا لاستنتاج بأن أغلب الساعات تتأثر بالتالي:
-1. الحالة
-2. الحجم
-3. سنة التصنيع
-4. الموديل
-5. نوع الحركة
-6. مادة السوار
+st.image("feature.png", width= 200)  
 
-سنعرض الآن الرسوم البيانية للخصائص المذكورة ومدى تأثيرها على قيمة الساعات.
-""")
 
 # Create a dropdown menu for selecting the chart to display
-
-
 selected_brand = st.selectbox("اختر الماركة:", ["All Brands"] + list(df['brand'].unique()))
 
 # Filter the dataframe based on the selected brand
