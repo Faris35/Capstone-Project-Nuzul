@@ -110,10 +110,6 @@ st.markdown("#### هل سوق الساعات في نمو مستمر؟")
 st.markdown(""" تم تقييم حجم سوق الساعات الفاخرة بحوالي 42.9 مليار دولار أمريكي في عام 2022. ومن المتوقع أن ينمو سوق الساعات الفاخرة من 45.1 مليار دولار أمريكي في عام 2023 إلى 68.2 مليار دولار أمريكي بحلول عام 2032، مع معدل نمو سنوي مركب قدره 5.30% خلال فترة التوقعات (2023 - 2032). ومن العوامل الرئيسية التي تدفع السوق هي الزيادة في اتجاه ارتداء البالغين للساعات الفاخرة كرمز للمكانة الاجتماعية.
 المصدر: [Market Research Future](https://www.marketresearchfuture.com/reports/luxury-watch-market-10897) """)
 
-import streamlit as st
-import matplotlib.pyplot as plt
-import numpy as np
-
 # Corrected data for the chart
 years = np.arange(2018, 2032 + 1)  # 15 years from 2018 to 2032
 market_sizes = [20, 25, 30, 35, 42.9, 45.1, 50, 52, 55, 60, 62, 64, 66, 68, 68.2]  # 15 values to match the years
