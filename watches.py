@@ -134,9 +134,7 @@ ax.set_ylim(0, 75)  # Adjust y-axis limit for better visibility
 
 # Add a horizontal line and arrow for title emphasis
 ax.annotate('', xy=(2018, 73), xytext=(2032, 73),
-            arrowprops=dict(arrowstyle='-|>', color='black', lw=1.5))
-ax.text(2025, 74, 'Luxury Watch Market', fontsize=10, ha='center')
-
+            arrowprops=dict(arrowstyle='<|-', color='black', lw=1.5))
 # Display the chart in Streamlit
 st.pyplot(fig)
 
