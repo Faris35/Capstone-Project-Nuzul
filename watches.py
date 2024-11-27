@@ -267,7 +267,7 @@ elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     )
 
     fig_size_price_bubble.update_layout(
-    title="الحجم والسعر حسب البراند",
+    #title="الحجم والسعر حسب البراند",
     xaxis_title="الحجم (mm)",
     yaxis_title="السعر (دولار أمريكي)",
     legend_title="البراند",
