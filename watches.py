@@ -207,7 +207,7 @@ chart_option = st.selectbox(
         "تحليل الأسعار حسب الموديل",
         "تحليل الأسعار حسب نوع الحركة",
         "ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)",
-        "تحليل الأسعار حسب مادة الساعة",
+        # "تحليل الأسعار حسب مادة الساعة",
         "تحليل الأسعار حسب مادة السوار",
         "متوسط الأسعار حسب الجنس"
     ]
@@ -258,11 +258,11 @@ elif chart_option == "ترند مواد تصنيع الهياكل حسب الع�
     st.plotly_chart(fig)
 
     ## Case material prices analysis
-    selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", df['year_of_production'].unique())
-    year_filtered_df = df[df['year_of_production'] == selected_year]
-    case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
-    st.markdown("### تحليل الأسعار حسب مادة الساعة:")
-    st.bar_chart(case_material_prices)
+    # selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", df['year_of_production'].unique())
+    # year_filtered_df = df[df['year_of_production'] == selected_year]
+    # case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
+    # st.markdown("### تحليل الأسعار حسب مادة الساعة:")
+    # st.bar_chart(case_material_prices)
 
 elif chart_option == "تحليل الأسعار حسب مادة السوار":
     bracelet_material_prices = df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
