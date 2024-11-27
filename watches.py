@@ -241,7 +241,7 @@ st.plotly_chart(fig)  # Interactive line chart for decade-wise data
 # Allow users to select a year and analyze case materials
 selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", filtered_df['decade'].unique())
 year_filtered_df = filtered_df[filtered_df['year_of_production'] == selected_year]
-case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
+case_material_prices = year_filtered_df.groupby('case_material')['decade'].median().sort_values(ascending=False)
 st.markdown("### تحليل الأسعار حسب مادة الساعة:")
 st.bar_chart(case_material_prices)
 
