@@ -176,56 +176,50 @@ st.markdown("""
 # popular_brands = df['brand'].value_counts().head(10)
 # st.bar_chart(popular_brands)
 
-# القسم الأول: أغلى الماركات
 st.markdown("""
 ### تدري وش الماركات اللي تتصدر أغلى الساعات بالعالم؟
-**ريتشارد ميل** متربعة على القمة بأسعارها العالية واللي تعكس ندرتها وفخامتها، تليها **باتيك فيليب** و**أوديمار بيغيه** كخيارات راقية ومميزة.  
-أما **رولكس**، فهي تقدم جودة عالية بفخامة وسعر أقل شوي مقارنة بالباقي.
+أكيد بتقول **رولكس** الأولى، صح؟
+لكن المفاجأة إنها مو حتى ضمن الأغلى!
+مثلًا، **Richard Mille** و **Patek Philippe** متصدرين القائمة بأسعار عالية جدًا.
+لكن إذا جينا للساعات اللي تشوفها بشكل أكبر أو تنتشر بين عشاق الساعات، الوضع يختلف!
 """)
 
-# حساب متوسط السعر لأغلى العلامات
 top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10).reset_index()
 
-# إضافة عمود للألوان لتحديد رولكس
 top_brands_all['color'] = top_brands_all['brand'].apply(lambda x: 'red' if x == 'Rolex' else 'blue')
 
-# رسم الشارت باستخدام Plotly
 fig1 = px.bar(
     top_brands_all,
     x='brand',
     y='price_usd',
     color='color',
     color_discrete_map={'red': 'red', 'blue': 'blue'},
-    title="أغلى الماركات حسب السعر المتوسط",
-    labels={'brand': 'العلامة التجارية', 'price_usd': 'السعر بالدولار'}
+    # title="أغلى الماركات حسب السعر المتوسط",
+    # labels={'brand': 'العلامة التجارية', 'price_usd': 'السعر بالدولار'}
 )
 fig1.update_traces(marker=dict(line=dict(width=1, color='black')))
 st.plotly_chart(fig1)
 
-# القسم الثاني: الأكثر انتشاراً
 st.markdown("""
 ### شفنا أغلى الماركات، بس وش الأكثر انتشاراً؟:
-**رولكس** جمعت بين السعر المعقول والانتشار الأكبر.  
-**باتيك فيليب**، رغم أنها من الأغلى، إلا أنها برضو من الأكثر انتشاراً.  
-بينما **أوميغا** و**تاغ هوير** ركزت على الشعبية والجودة بسعر أقل.
+رولكس هنا تتصدر المشهد.
+رغم إنها مو الأغلى، إلا إنها الأكثر شعبية وتواجد بين عشاق الساعات.
+ليش؟ لأنها جمعت بين الفخامة والجودة بسعر يعتبر معقول نسبيًا مقارنة بالباقين.
 """)
 
-# حساب أكثر العلامات انتشاراً
 popular_brands = df['brand'].value_counts().head(10).reset_index()
 popular_brands.columns = ['brand', 'count']
 
-# إضافة عمود للألوان لتحديد رولكس
 popular_brands['color'] = popular_brands['brand'].apply(lambda x: 'red' if x == 'Rolex' else 'blue')
 
-# رسم الشارت باستخدام Plotly
 fig2 = px.bar(
     popular_brands,
     x='brand',
     y='count',
     color='color',
     color_discrete_map={'red': 'red', 'blue': 'blue'},
-    title="أكثر العلامات انتشاراً",
-    labels={'brand': 'العلامة التجارية', 'count': 'عدد الساعات'}
+    # title="أكثر العلامات انتشاراً",
+    # labels={'brand': 'العلامة التجارية', 'count': 'عدد الساعات'}
 )
 fig2.update_traces(marker=dict(line=dict(width=1, color='black')))
 st.plotly_chart(fig2)
