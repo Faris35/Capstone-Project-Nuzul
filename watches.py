@@ -45,8 +45,6 @@ st.markdown("""
 في "زينة وخزينة"، حللنا سوق الساعات عشان نفهم وش يفرق بين الماركات ونترك الحكم لك. جمعنا البيانات من موقع "Chrono24"، المتخصص في بيع الساعات الجديدة والمستعملة، لتقديم صورة واضحة تساعدك في معرفة إذا كانت الساعات الفاخرة مجرد زينة أم استثمار حقيقي
 """)
 
-import streamlit as st
-
 # URL and logo details
 url = "https://www.chrono24.com/"
 logo_path = "./logo-positive-reduced.svg"
@@ -96,8 +94,63 @@ st.markdown("#### هل سوق الساعات في نمو مستمر؟")
 st.markdown(""" تم تقييم حجم سوق الساعات الفاخرة بحوالي 42.9 مليار دولار أمريكي في عام 2022. ومن المتوقع أن ينمو سوق الساعات الفاخرة من 45.1 مليار دولار أمريكي في عام 2023 إلى 68.2 مليار دولار أمريكي بحلول عام 2032، مع معدل نمو سنوي مركب قدره 5.30% خلال فترة التوقعات (2023 - 2032). ومن العوامل الرئيسية التي تدفع السوق هي الزيادة في اتجاه ارتداء البالغين للساعات الفاخرة كرمز للمكانة الاجتماعية.
 المصدر: [Market Research Future](https://www.marketresearchfuture.com/reports/luxury-watch-market-10897) """)
 
-st.image("./Global_Luxury_Watch_Market.jpg",width=500)
+#st.image("./Global_Luxury_Watch_Market.jpg",width=500)
 
+# Data for the Luxury Watch Market
+years = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2030, 2031, 2032]
+market_sizes = [15, 20, 30, 42.9, 45.1, 50, 55, 60, 65, 68.2, 68.2, 68.2]
+
+# # Create the bar chart
+# fig = go.Figure()
+# fig.add_trace(go.Bar(
+
+#     x=years,
+
+#     y=market_sizes,
+
+#     marker_color='red',
+
+#     name="Market Size (USD Bn)"
+
+# ))
+
+# # Update the layout
+# fig.update_layout(
+
+#     title="Luxury Watch Market",
+
+#     xaxis_title="Year",
+
+#     yaxis_title="Market Size in USD Bn",
+
+#     template="plotly_white",
+
+#     font=dict(size=14),
+
+#     showlegend=False
+
+# )
+# fig.show()
+# import plotly.graph_objects as go
+
+# Create the bar chart using Plotly Express
+fig = px.bar(
+    x=years,
+    y=market_sizes,
+    labels={'x': 'Year', 'y': 'Market Size in USD Bn'},
+    title="Luxury Watch Market",
+    color_discrete_sequence=['red']
+)
+
+# Update the layout
+fig.update_layout(
+    template="plotly_white",
+    font=dict(size=14),
+    showlegend=False
+)
+
+# Display the chart in Streamlit
+st.plotly_chart(fig)
 
 
 
