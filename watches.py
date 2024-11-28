@@ -236,7 +236,7 @@ st.plotly_chart(fig2)
 st.markdown("<br><br>", unsafe_allow_html=True)
 
 st.markdown("""
-### :بعد دراسة البيانات وخصائص الساعات، تبين أن قيمة الساعة تختلف بناءً على العوامل التالية 
+### بعد دراسة البيانات وخصائص الساعات، تبين أن قيمة الساعة تختلف بناءً على العوامل التالية:
 """)
 
 st.image("feature.png", use_column_width=True)
