@@ -9,6 +9,7 @@ import plotly.express as px  # For interactive visualizations
 import plotly.graph_objects as go  # For creating detailed plotly graphs
 from plotly.subplots import make_subplots  # For creating subplots
 import numpy as np  # For numerical computing
+import requests  # For making HTTP requests
 
 # Displaying a logo or an image on the app
 col1, col2, col3 = st.columns(3)
@@ -562,6 +563,122 @@ st.markdown("""
 st.write("""
 هالنقاط بتساعدك تختار الساعة اللي تناسبك سواء كشكل أو كاستثمار ذكي.
 """)
+
+# Load the dataset
+df = pd.read_csv('Final_version4_all_watches.csv')  # Ensure the file exists in the correct location
+
+# Dropdown for Brand Selection
+selected_brand = st.selectbox("اختر العلامة التجارية:", sorted(df['brand'].unique()))
+
+# Filter the models based on the selected brand
+filtered_models = df[df['brand'] == selected_brand]
+
+# Dropdown for Model Selection
+selected_model = st.selectbox("اختر الموديل:", sorted(filtered_models['model'].unique()))
+
+# Filter the years based on the selected brand and model
+filtered_years = filtered_models[filtered_models['model'] == selected_model]
+
+# Dropdown for Year Selection
+selected_year = st.selectbox("اختر سنة التصنيع:", sorted(filtered_years['year_of_production'].unique()))
+
+# Extract the reference for the selected row
+selected_row = filtered_years[
+    (filtered_years['model'] == selected_model) & 
+    (filtered_years['year_of_production'] == selected_year)
+]
+
+# Ensure the reference exists
+if not selected_row.empty:
+    reference = selected_row.iloc[0]['ref']
+    st.write(f"تم استخراج الرقم المرجعي: {reference}")
+
+    # Use the extracted reference as input for the API
+    api_key = "Q54K647We9a6QAitZA9Wn5rn9l3I2P9i3O53VuZ8"
+    url = f'https://api.watchcharts.com/v3/search/watch?brand_name={selected_brand}&reference={reference}'
+
+    headers = {
+        "x-api-key": api_key,
+        "Content-Type": "application/json",
+    }
+
+    response = requests.get(url, headers=headers)
+
+    # Display the API response
+    if response.status_code == 200:
+        data = response.json()
+        if data.get('success') and 'results' in data:
+            results = data['results']
+            if len(results) > 0:
+                uuid = results[0].get('uuid', None)
+                st.success(f"تم استخراج UUID: {uuid}")
+                st.write("تفاصيل البحث:")
+                st.json(data)
+            else:
+                st.warning("لم يتم العثور على نتائج.")
+        else:
+            st.error("لم يتم استرجاع البيانات بشكل صحيح.")
+    else:
+        st.error(f"خطأ في طلب API: {response.status_code}")
+else:
+    st.warning("لم يتم العثور على الرقم المرجعي لهذه الخيارات.")
+
+# Streamlit Title
+st.title("معلومات الساعة")
+
+# Replace with your API endpoint and API key
+search_url = 'https://api.watchcharts.com/v3/search/watch?brand_name=rolex&reference=116500'
+api_key = "Q54K647We9a6QAitZA9Wn5rn9l3I2P9i3O53VuZ8"  # Replace with your API key
+
+# Set up headers, including your API key
+headers = {
+    "x-api-key": api_key,
+    "Content-Type": "application/json",
+}
+
+# Step 1: Make the first request to retrieve the UUID
+st.write("Fetching watch data...")
+
+response = requests.get(search_url, headers=headers)
+
+if response.status_code == 200:
+    data = response.json()
+    if data.get('success') and 'results' in data:
+        results = data['results']
+        if len(results) > 0:
+            uuid = results[0].get('uuid', None)
+            if uuid:
+                st.success(f"Retrieved UUID: {uuid}")
+
+                # Step 2: Use the UUID to make the second request
+                info_url = f'https://api.watchcharts.com/v3/watch/info?uuid={uuid}'
+                info_response = requests.get(info_url, headers=headers)
+
+                if info_response.status_code == 200:
+                    info_data = info_response.json()
+                    
+                    # Display the data using Streamlit
+                    st.subheader("Watch Details")
+                    st.write("Below is the detailed information about the watch:")
+                    st.markdown(f"""
+                        - **Brand**: {info_data['brand']}
+                        - **Collection**: {info_data['collection']}
+                        - **Model**: {info_data['model']}
+                        - **Market Price**: ${info_data['market_price']:,.2f}
+                        - **Dealer Price**: ${info_data['dealer_price']:,.2f}
+                        - **Volatility**: {info_data['volatility'] * 100:.2f}%
+                        - **Last Updated**: {info_data['updated']}
+                    """)
+                else:
+                    st.error(f"Error fetching detailed watch info: {info_response.status_code}")
+            else:
+                st.warning("UUID not found in the first result.")
+        else:
+            st.warning("No results found.")
+    else:
+        st.error("Unexpected JSON structure or 'success' flag missing in response.")
+else:
+    st.error(f"Error fetching data: {response.status_code}")
 
 
 
