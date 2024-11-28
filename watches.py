@@ -564,6 +564,10 @@ st.write("""
 هالنقاط بتساعدك تختار الساعة اللي تناسبك سواء كشكل أو كاستثمار ذكي.
 """)
 
+import streamlit as st
+import pandas as pd
+import requests
+
 # Load the dataset
 df = pd.read_csv('Final_version4_all_watches.csv')  # Ensure the file exists in the correct location
 
@@ -588,21 +592,21 @@ selected_row = filtered_years[
     (filtered_years['year_of_production'] == selected_year)
 ]
 
-# Ensure the reference exists
-if not selected_row.empty:
+# Check if the reference exists
+if not selected_row.empty and 'ref' in selected_row.columns:
     reference = selected_row.iloc[0]['ref']
     st.write(f"تم استخراج الرقم المرجعي: {reference}")
 
     # Use the extracted reference as input for the API
     api_key = "Q54K647We9a6QAitZA9Wn5rn9l3I2P9i3O53VuZ8"
-    url = f'https://api.watchcharts.com/v3/search/watch?brand_name={selected_brand}&reference={reference}'
+    search_url = f'https://api.watchcharts.com/v3/search/watch?brand_name={selected_brand}&reference={reference}'
 
     headers = {
         "x-api-key": api_key,
         "Content-Type": "application/json",
     }
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(search_url, headers=headers)
 
     # Display the API response
     if response.status_code == 200:
@@ -614,41 +618,6 @@ if not selected_row.empty:
                 st.success(f"تم استخراج UUID: {uuid}")
                 st.write("تفاصيل البحث:")
                 st.json(data)
-            else:
-                st.warning("لم يتم العثور على نتائج.")
-        else:
-            st.error("لم يتم استرجاع البيانات بشكل صحيح.")
-    else:
-        st.error(f"خطأ في طلب API: {response.status_code}")
-else:
-    st.warning("لم يتم العثور على الرقم المرجعي لهذه الخيارات.")
-
-# Streamlit Title
-st.title("معلومات الساعة")
-
-# Replace with your API endpoint and API key
-search_url = 'https://api.watchcharts.com/v3/search/watch?brand_name=rolex&reference=116500'
-api_key = "Q54K647We9a6QAitZA9Wn5rn9l3I2P9i3O53VuZ8"  # Replace with your API key
-
-# Set up headers, including your API key
-headers = {
-    "x-api-key": api_key,
-    "Content-Type": "application/json",
-}
-
-# Step 1: Make the first request to retrieve the UUID
-st.write("Fetching watch data...")
-
-response = requests.get(search_url, headers=headers)
-
-if response.status_code == 200:
-    data = response.json()
-    if data.get('success') and 'results' in data:
-        results = data['results']
-        if len(results) > 0:
-            uuid = results[0].get('uuid', None)
-            if uuid:
-                st.success(f"Retrieved UUID: {uuid}")
 
                 # Step 2: Use the UUID to make the second request
                 info_url = f'https://api.watchcharts.com/v3/watch/info?uuid={uuid}'
@@ -656,68 +625,31 @@ if response.status_code == 200:
 
                 if info_response.status_code == 200:
                     info_data = info_response.json()
-                    
-                    # Display the data using Streamlit
-                    st.subheader("Watch Details")
-                    st.write("Below is the detailed information about the watch:")
+
+                    # Extract data with proper handling for missing values
+                    market_price = info_data.get('market_price')
+                    dealer_price = info_data.get('dealer_price')
+                    market_price_formatted = f"${market_price:,.2f}" if market_price else "N/A"
+                    dealer_price_formatted = f"${dealer_price:,.2f}" if dealer_price else "N/A"
+
+                    st.subheader("تفاصيل الساعة")
+                    st.write("فيما يلي المعلومات التفصيلية عن الساعة:")
                     st.markdown(f"""
-                        - **Brand**: {info_data['brand']}
-                        - **Collection**: {info_data['collection']}
-                        - **Model**: {info_data['model']}
-                        - **Market Price**: ${info_data['market_price']:,.2f}
-                        - **Dealer Price**: ${info_data['dealer_price']:,.2f}
-                        - **Volatility**: {info_data['volatility'] * 100:.2f}%
-                        - **Last Updated**: {info_data['updated']}
+                        - **العلامة التجارية**: {info_data.get('brand', 'N/A')}
+                        - **المجموعة**: {info_data.get('collection', 'N/A')}
+                        - **الموديل**: {info_data.get('model', 'N/A')}
+                        - **السعر في السوق**: {market_price_formatted}
+                        - **سعر التاجر**: {dealer_price_formatted}
+                        - **التقلب**: {info_data.get('volatility', 'N/A') * 100 if info_data.get('volatility') else 'N/A'}%
+                        - **آخر تحديث**: {info_data.get('updated', 'N/A')}
                     """)
                 else:
-                    st.error(f"Error fetching detailed watch info: {info_response.status_code}")
+                    st.error(f"خطأ أثناء جلب تفاصيل الساعة: {info_response.status_code}")
             else:
-                st.warning("UUID not found in the first result.")
+                st.warning("لم يتم العثور على نتائج.")
         else:
-            st.warning("No results found.")
+            st.error("لم يتم استرجاع البيانات بشكل صحيح.")
     else:
-        st.error("Unexpected JSON structure or 'success' flag missing in response.")
+        st.error(f"خطأ في طلب API: {response.status_code}")
 else:
-    st.error(f"Error fetching data: {response.status_code}")
-
-
-
-
-
-
-
-
-
-########## OLD CODE ##########
-
-    ## Case material prices analysis It was with the same code as the bracelet material prices analysis
-    # selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", df['year_of_production'].unique())
-    # year_filtered_df = df[df['year_of_production'] == selected_year]
-    # case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
-    # st.markdown("### تحليل الأسعار حسب مادة الساعة:")
-    # st.bar_chart(case_material_prices)
-
-# Interactive filters for watch specifications
-# st.header("اختر مواصفات الساعة:")
-# brand = st.selectbox("البراند", df['brand'].unique())
-# movement = st.selectbox("نوع الحركة", df[df['brand'] == brand]['movement'].unique())
-# case_material = st.selectbox("مادة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement)]['case_material'].unique())
-# bracelet_material = st.selectbox("مادة السوار", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material)]['bracelet_material'].unique())
-# year_of_production = st.selectbox("سنة التصنيع", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material)]['year_of_production'].unique())
-# condition = st.selectbox("حالة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material) & (df['year_of_production'] == year_of_production)]['condition'].unique())
-
-# # Filter data based on selected criteria
-# filtered_data = df[
-#     (df['brand'] == brand) &
-#     (df['movement'] == movement) &
-#     (df['case_material'] == case_material) &
-#     (df['bracelet_material'] == bracelet_material) &
-#     (df['year_of_production'] == year_of_production) &
-#     (df['condition'] == condition)
-# ]
-
-# # Display available watches based on the selected filters
-# st.subheader("الساعات المتوفرة:")
-# filtered_data['price_range'] = filtered_data.groupby('model')['price_usd'].transform(lambda x: f"${x.min()} - ${x.max()}")
-# filtered_data = filtered_data.drop_duplicates(subset=['model'])
-# st.write(filtered_data[['model', 'price_range']])  # Display filtered watch details
+    st.warning("لم يتم العثور على الرقم المرجعي لهذه الخيارات أو العمود 'reference' مفقود.")
