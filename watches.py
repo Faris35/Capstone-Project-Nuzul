@@ -157,7 +157,7 @@ market_sizes = [20, 25, 30, 35, 42.9, 45.1, 50, 52, 55, 60, 62, 64, 66, 68, 68.2
 
 # Create the line chart
 fig, ax = plt.subplots(figsize=(10, 5))
-ax.plot(years, market_sizes, marker='o', color='red', linestyle='-', linewidth=2, markersize=6)
+ax.plot(years, market_sizes, marker='o', color='blue', linestyle='-', linewidth=2, markersize=6)
 
 # Add labels to points
 for i, txt in enumerate(market_sizes):
