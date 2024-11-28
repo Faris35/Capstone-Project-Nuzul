@@ -235,15 +235,12 @@ st.plotly_chart(fig2)
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 
-col1, col2 = st.columns([1, 2])
+st.markdown("""
+بعد دراسة البيانات وخصائص الساعات، تبين أن قيمة الساعة تختلف بناءً على العوامل التالية ###
+""")
 
-with col1:
-    st.image("feature.png", use_column_width=True)
+st.image("feature.png", use_column_width=True)
 
-with col2:
-    st.markdown("""
-    ،بعد دراسة البيانات وخصائص الساعات، تبين أن قيمة الساعة تختلف بناءً على العوامل التالية
-    """)
 
 
 # Create a dropdown menu for selecting the chart to display
