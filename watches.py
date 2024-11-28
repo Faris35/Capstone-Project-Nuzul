@@ -268,6 +268,14 @@ chart_option = st.selectbox(
 
 # Display the selected chart
 if chart_option == "تحليل الأسعار حسب حالة الساعة":
+    
+    # Add a description for the chart
+    st.markdown("""
+        يعكس هذا الرسم البياني توزيع أسعار الساعات حسب حالتها والعلامة التجارية. 
+        يساعدنا هذا التحليل في فهم تأثير حالة الساعة (مثل جديدة، غير مستخدمة، بحالة جيدة) 
+        على قيمتها السوقية، مع تسليط الضوء على العلامات التجارية التي تقود السوق في الفئات ذات الأسعار العالية.
+    """)
+    
     if selected_brand != "All Brands":
         # Filter the data for the selected brand
         filtered_data = df[df['brand'] == selected_brand].copy()
@@ -317,6 +325,13 @@ if chart_option == "تحليل الأسعار حسب حالة الساعة":
 
 
 elif chart_option == "تحليل الأسعار حسب حجم الساعة":
+    # Add a description for the chart
+    st.markdown("""
+        يعكس هذا الرسم البياني العلاقة بين حجم الساعة (بالمليمتر) وقيمتها السوقية بالدولار الأمريكي، 
+        مع توزيع النقاط حسب العلامة التجارية. يساعد هذا التحليل في فهم تأثير حجم الساعة على السعر 
+        واستكشاف العلامات التجارية التي تركز على أحجام محددة وتستهدف فئات سعرية معينة.
+    """)
+
     size_prices = df.groupby('size_mm')['price_usd'].median()
 
     distinct_color_map = {
