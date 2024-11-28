@@ -1,78 +1,108 @@
-# Import libraries
-import streamlit as st
-from PIL import Image
-import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.express as px
-import numpy as np
+# Import necessary libraries
+import streamlit as st  # Streamlit for building the interactive web app
+from PIL import Image  # To handle image loading and manipulation
+import pandas as pd  # For data manipulation and analysis
+import seaborn as sns  # For statistical data visualization
+import matplotlib.pyplot as plt  # For plotting charts
+from sklearn.preprocessing import LabelEncoder  # For encoding categorical variables
+import plotly.express as px  # For interactive visualizations
+import plotly.graph_objects as go  # For creating detailed plotly graphs
+from plotly.subplots import make_subplots  # For creating subplots
+import numpy as np  # For numerical computing
 
-st.set_page_config(page_title="زينة وخزينة", page_icon=":watch:")
+# Displaying a logo or an image on the app
+col1, col2, col3 = st.columns(3)
 
+with col1:
+    st.write(' ')
+
+with col2:
+    st.image("zeina.png", width= 200)  # Display an image with a specific width
+
+with col3:
+    st.write(' ')
+
+
+
+# Adding RTL (Right-to-Left) styling for Arabic content
 rtl_css = """
 <style>
 body {
     direction: rtl;
-    text-align: center;
+    text-align: right;
 }
 </style>
 """
+st.markdown(rtl_css, unsafe_allow_html=True)  # Applying RTL style for Arabic alignment
 
+# Loading the dataset
+df = pd.read_csv('Final_version4_all_watches.csv')  # Load watch data; ensure file exists in the correct location
 
-
-st.markdown(rtl_css, unsafe_allow_html=True)
-
-st.image("logo.png", width=700)
-st.markdown(
-    """
+# Adding a catchy title to the app
+st.markdown("""
     <style>
-    .custom-title {
-        font-size: 70px; 
-        font-weight: bold;
-        text-align: right; 
-        color: #fff;
-    }
+        .main-title {
+            font-family: 'Georgia', sans-serif;
+            font-size: 30px;
+            font-weight: bold;
+            color: #3b1277; /* Smooth blue color for the title */
+            #text-align: center;
+            margin-top: 50px; /* Space above the title */
+            line-height: 1.4;
+        }
+    </style>
+    <div class="main-title">
+        ساعتك مو للزينة بس تقدر تستثمر فيها، خلها زينة وخزينة!
+    </div>
+""", unsafe_allow_html=True)
 
-    .stMarkdown p {
-        font-size: 30px;
-        font-weight: normal;
-        text-align: right;
-        color: #333;
-        line-height: 1.6 !important;
-    }
+# Adding a description and context for the app
 
-    div.stSelectbox > label {
-        font-size: 60px !important;  /* Adjust label font size */
-    }
-        div.stSelectbox select {
-        font-size: 50px !important; /* Adjust select options font size */
-        height: 50px !important; /* Adjust height */
-        width: 300px !important; /* Adjust width for better visibility */
-    }
 
-    /* Style for checkbox label */
-    div.stCheckbox label {
-        font-size: 60px !important; /* Adjust checkbox label font size */
-    }
+st.markdown("""
+        <style>
+        .custom-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            font-weight: 400; /* Regular weight for better readability */
+            color: #444444; /* Neutral dark gray for both light and dark modes */
+            text-align: justify;
+            line-height: 1.8; /* Comfortable line spacing */
+            margin-bottom: 20px; /* Space below the text */
+        }
+        .highlight {
+            color: #6D9DC5; /* Gold color to emphasize certain phrases */
+            font-weight: bold;
+        }
+        </style>
+        <div class="custom-text">
+            فكرت تشتري ساعة غالية؟ يقولون الساعات الفخمة مو بس زينة، لكنها استثمار يرفع قيمتها مع الوقت. والمؤثرين يتكلمون عنها كأنها الذهب الجديد، لكن هل كلامهم صحيح؟
+
+        في "زينة وخزينة"، حللنا سوق الساعات عشان نفهم وش يفرق بين الماركات ونترك الحكم لك. جمعنا البيانات من موقع "Chrono24"، المتخصص في بيع الساعات الجديدة والمستعملة، لتقديم صورة واضحة تساعدك في معرفة إذا كانت الساعات الفاخرة مجرد زينة أم استثمار حقيقي
+
+        </div>
+        """, unsafe_allow_html=True)
+
+# URL and logo details
+url = "https://www.chrono24.com/"
+logo_path = "./logo-positive-reduced.svg"
+
+# Custom CSS for subtle-colored widgets in a 3x3 grid
+st.markdown("""
+    <style>
     .grid-container {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr; /* Three columns */
         gap: 10px; /* Spacing between grid items */
-        text-align: center;
-        
-        
     }
     .widget {
         padding: 10px;
         border-radius: 8px;
+        font-size: 14px;
+        color: black;
         text-align: center;
         font-weight: bold;
         cursor: pointer;
-        font-size: 30px;
-        text-align: right;
-        color: #333;
-        line-height: 1.6 !important;
     }
     .widget1 { background-color: #D9F2E6; }  /* Soft Green */
     .widget2 { background-color: #D9EAFB; }  /* Soft Blue */
@@ -84,64 +114,24 @@ st.markdown(
     .widget8 { background-color: #D9F2F0; }  /* Soft Teal */
     .widget9 { background-color: #F2E6D9; }  /* Soft Beige */
     </style>
-    """,
-    unsafe_allow_html=True
-)
-#---------------------------------------------------------------------------------------------------------
-# Load data
-df = pd.read_csv('Final_version4_all_watches.csv')
-#----------------------------------------------------------------------------------------------------------
-# Title
-# Introduction with a rectangle background
-st.markdown(
-    """
-    <style>
-        .custom-container {
-            background-color: #9e9085; 
-            border: 2px solid #ccc;     
-            border-radius: 10px;       
-            padding: 70px;              
-            margin: 20px 0;            
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-            font-size: 50px;           
-            line-height: 1.8;          
-            text-align: right;         
-            color: #000;                
-          
-        }
-    </style>
-    <div class="custom-container">
-        فكرت تشتري ساعة غالية؟ يقولون الساعات الفخمة مو بس زينة،
-        لكنها استثمار يرفع قيمتها مع الوقت.
-        <br>
-        والمؤثرين يتكلمون عنها كأنها الذهب الجديد،
-        لكن هل كلامهم صحيح؟
-        في "زينة وخزينة" حللنا سوق الساعات عشان نفهم وش يفرق بين الماركات ونترك الحكم لك.
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
-st.markdown("<br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
-#----------------------------------------------------------------------------------------------------------------
-url = "https://www.chrono24.com/"
-logo_path = "./logo-positive-reduced.svg"
 col1, col2, col3 = st.columns(3)
 
 # Column 1: Logo with title
 with col1:
-    st.markdown("<h3 style='text-align: center; font-weight: bold; color: #5C4D4D;'>المصدر</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; font-weight: bold;'>المصدر</h3>", unsafe_allow_html=True)
     st.image(logo_path, width=150)
     st.markdown(f"[للإطلاع]({url})", unsafe_allow_html=True)
 
 # Column 2: Watches text with title
 with col2:
-    st.markdown("<h3 style='text-align: center; font-weight: bold; color: #5C4D4D;'>حجم البيانات</h3>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; font-weight: normal; color: #2C2A2A;'>40,000+<br>ساعة</h4>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; font-weight: bold;'>حجم البيانات</h3>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center;'>40,000+<br>ساعة</h4>", unsafe_allow_html=True)
 
 # Column 3: Widgets in a 3x3 grid with title
 with col3:
-    st.markdown("<h3 style='text-align: center; font-weight: bold; color: #5C4D4D;'>شكل البيانات</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; font-weight: bold;'>شكل البيانات</h3>", unsafe_allow_html=True)
     st.markdown("""
         <div class="grid-container">
             <div class="widget widget1">الحالة</div>
@@ -156,146 +146,93 @@ with col3:
         </div>
     """, unsafe_allow_html=True)
 
-# Adjusted styling for the rest of the content
-st.markdown("#### هل سوق الساعات في نمو مستمر؟", unsafe_allow_html=True)
+st.markdown("#### هل سوق الساعات في نمو مستمر؟")
 
+st.markdown("""قُدّر حجم سوق الساعات الفاخرة بحوالي 42.9 مليار دولار أمريكي في عام 2022، ومن المتوقع أن ينمو من 45.1 مليار دولار أمريكي في عام 2023 إلى 68.2 مليار دولار أمريكي بحلول عام 2032، بمعدل نمو سنوي مركب (CAGR) يبلغ 5.30% خلال فترة التوقعات (2024 - 2032). يُعدّ الاتجاه المتزايد بين البالغين لارتداء الساعات الفاخرة كرمز للمكانة الاجتماعية أحد أبرز العوامل التي تُحفّز نمو هذا السوق.
+المصدر: [Market Research Future](https://www.marketresearchfuture.com/reports/luxury-watch-market-10897) """)
 
-#---------------------------------------------------------------------------------------------------------------
-col1, col2 = st.columns([1, 2]) 
-with col1:
-    st.markdown(
-        """
-        <div style="display: flex; justify-content: center; 
-        align-items: right; height: 100%; font-size: 35px; text-align: right; margin-top: 400px; margin-bottom: 100px;">
-         هل سوق الساعات في نمو مستمر؟
+# Corrected data for the chart
+years = np.arange(2018, 2032 + 1)  # 15 years from 2018 to 2032
+market_sizes = [20, 25, 30, 35, 42.9, 45.1, 50, 52, 55, 60, 62, 64, 66, 68, 68.2]  # 15 values to match the years
 
-        </div>
-        """, unsafe_allow_html=True
-    )
-    st.markdown("""<p style="font-size: 16px; color: #2C2A2A; line-height: 1.5;">قُدّر حجم سوق الساعات الفاخرة بحوالي 42.9 مليار دولار أمريكي في عام 2022، ومن المتوقع أن ينمو من 45.1 مليار دولار أمريكي في عام 2023 إلى 68.2 مليار دولار أمريكي بحلول عام 2032، بمعدل نمو سنوي مركب (CAGR) يبلغ 5.30% خلال فترة التوقعات (2024 - 2032). يُعدّ الاتجاه المتزايد بين البالغين لارتداء الساعات الفاخرة كرمز للمكانة الاجتماعية أحد أبرز العوامل التي تُحفّز نمو هذا السوق.</p>""", unsafe_allow_html=True)
-    st.markdown("المصدر: [Market Research Future](https://www.marketresearchfuture.com/reports/luxury-watch-market-10897)", unsafe_allow_html=True)
+# Create the line chart
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.plot(years, market_sizes, marker='o', color='red', linestyle='-', linewidth=2, markersize=6)
 
-
-with col2:
-    years = np.arange(2018, 2032 + 1)  # 15 years from 2018 to 2032
-    market_sizes = [20, 25, 30, 35, 42.9, 45.1, 50, 52, 55, 60, 62, 64, 66, 68, 68.2]  # 15 values to match the years
-
-    # Create the chart
-    fig, ax = plt.subplots(figsize=(10, 5))
-    bars = ax.bar(years, market_sizes, color='red', edgecolor='black')
-
-    # Add labels to bars
-    for bar in bars:
-        height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width() / 2, height + 0.5, f'{height}', ha='center', fontsize=8)
+# Add labels to points
+for i, txt in enumerate(market_sizes):
+    ax.annotate(f'{txt}', (years[i], market_sizes[i]), textcoords="offset points", xytext=(0, 5), ha='center', fontsize=8)
 
 # Customize the chart
-    ax.set_title('Luxury Watch Market', fontsize=16, fontweight='bold')
-    ax.set_ylabel('Market Size in USD Bn', fontsize=12)
-    ax.set_xticks(years)
-    ax.set_xticklabels(years, rotation=45, fontsize=10)
-    ax.grid(axis='y', linestyle='--', alpha=0.7)
-    ax.set_ylim(0, 75)  # Adjust y-axis limit for better visibility
+ax.set_title('Luxury Watch Market', fontsize=16, fontweight='bold')
+ax.set_ylabel('Market Size in USD Bn', fontsize=12)
+ax.set_xticks(years)
+ax.set_xticklabels(years, rotation=45, fontsize=10)
+ax.grid(axis='y', linestyle='--', alpha=0.7)
+ax.set_ylim(0, 75)  # Adjust y-axis limit for better visibility
 
-# Add a horizontal line and arrow for title emphasis
-    ax.annotate('', xy=(2018, 73), xytext=(2032, 73),
-                arrowprops=dict(arrowstyle='<|-', color='black', lw=1.5))
 # Display the chart in Streamlit
-    st.pyplot(fig)
-#-----------------------------
+st.pyplot(fig)
+
+
+
+# Split the layout into two columns for better data presentation
+
 st.markdown(""" ### بعد ما أخذنا فكرة عن سوق الساعات ونموه، خلونا نركز على التفاصيل أكثر ونشوف وش الماركات اللي تسيطر على قائمة الأغلى، وهل دايم السعر يعكس الانتشار والشعبية؟""")
 
-#------------------------------------------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------------------
-col1, col2 = st.columns([1, 2]) 
-with col1:
-    st.markdown(
-        """
-        <div style="display: flex; justify-content: center; 
-        align-items: right; height: 100%; font-size: 35px; text-align: right; margin-top: 400px; margin-bottom: 100px;">
-             تدري وش الماركات اللي تتصدر أغلى الساعات بالعالم؟
-             تتوقع **رولكس** الأولى؟ 
-             المفاجأة إنها حتى مو ضمن اغلى خمس ماركات!
-             مثلًا، **Richard Mille** و **Patek Philippe** متصدرين القائمة بأسعار عالية جدًا.
-             لكن إذا جينا للساعات اللي تشوفها بشكل أكبر أو تنتشر بين عشاق الساعات، الوضع يختلف!
-        </div>
-        """, unsafe_allow_html=True
-    )
+st.markdown("""
+### تدري وش الماركات اللي تتصدر أغلى الساعات بالعالم؟
+تتوقع **رولكس** الأولى؟
+المفاجأة إنها حتى مو ضمن اغلى خمس ماركات!
+مثلًا، **Richard Mille** و **Patek Philippe** متصدرين القائمة بأسعار عالية جدًا.
+لكن إذا جينا للساعات اللي تشوفها بشكل أكبر أو تنتشر بين عشاق الساعات، الوضع يختلف!
+""")
 
-with col2:
-    top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10)
+top_brands_all = df.groupby('brand')['price_usd'].median().sort_values(ascending=False).head(10).reset_index()
 
-    fig = px.bar(top_brands_all, 
-                 x=top_brands_all.index, 
-                 y=top_brands_all.values, 
-                 labels={'x': 'العلامات التجارية', 'y': 'السعر المتوسط بالـ USD'},
-                 title="متوسط الأسعار لأغلى عشر ماركات:")
+top_brands_all['color'] = top_brands_all['brand'].apply(lambda x: 'red' if x == 'Rolex' else 'blue')
 
-    fig.update_layout(
-        width=1000,  
-        height=900,  
-        title_font_size=35,  
-        xaxis_title_font_size=35,  
-        yaxis_title_font_size=35, 
-        xaxis_tickfont_size=20,  
-        yaxis_tickfont_size=20
-    )
-    st.plotly_chart(fig)
-#-----------------------------------------------
+fig1 = px.bar(
+    top_brands_all,
+    x='brand',
+    y='price_usd',
+    color='color',
+    color_discrete_map={'red': 'red', 'blue': 'blue'},
+    # title="أغلى الماركات حسب السعر المتوسط",
+    # labels={'brand': 'العلامة التجارية', 'price_usd': 'السعر بالدولار'}
+)
+fig1.update_traces(marker=dict(line=dict(width=1, color='black')))
+st.plotly_chart(fig1)
 
-col1, col2 = st.columns([1, 2])
+st.markdown("""
+### شفنا أغلى الماركات، بس وش الأكثر انتشاراً؟:
+رولكس هنا تتصدر المشهد.
+رغم إنها مو الأغلى، إلا إنها الأكثر شعبية وتواجد بين عشاق الساعات.
+ليش؟ لأنها جمعت بين الفخامة والجودة بسعر يعتبر معقول نسبيًا مقارنة بالباقين.
+""")
 
-with col1:
-    st.markdown(
-        """
-        <div style="display: flex; justify-content: center; 
-        align-items: right; height: 100%; font-size: 35px; text-align: right; margin-top: 400px; margin-bottom: 100px;">
-             شفنا أغلى الماركات، بس وش الأكثر انتشاراً؟:
-             رولكس هنا تتصدر المشهد.
-             رغم إنها مو الأغلى، إلا إنها الأكثر شعبية وتواجد بين عشاق الساعات.
-             ليش؟ لأنها جمعت بين الفخامة والجودة بسعر يعتبر معقول نسبيًا مقارنة بالباقين.
-        </div>
-        """, unsafe_allow_html=True
-    )
+popular_brands = df['brand'].value_counts().head(10).reset_index()
+popular_brands.columns = ['brand', 'count']
 
-with col2:
-    popular_brands = df['brand'].value_counts().head(10).reset_index()
-    popular_brands.columns = ['brand', 'count']
+popular_brands['color'] = popular_brands['brand'].apply(lambda x: 'red' if x == 'Rolex' else 'blue')
 
-# Assigning a color based on brand
-    popular_brands['color'] = popular_brands['brand'].apply(lambda x: 'red' if x == 'Rolex' else 'blue')
-
-# Creating a bar chart using plotly express
-    fig2 = px.bar(
-         popular_brands,
-         x='brand',
-         y='count',
-         color='color',
-         color_discrete_map={'red': 'red', 'blue': 'blue'},
-         title="أكثر العلامات انتشاراً",
-         labels={'brand': 'العلامة التجارية', 'count': 'عدد الساعات'}
-    )
-    fig.update_layout(
-        width=1000,  
-        height=900,  
-        title_font_size=35,  
-        xaxis_title_font_size=35,  
-        yaxis_title_font_size=35, 
-        xaxis_tickfont_size=20,  
-        yaxis_tickfont_size=20
-    )
-
-# Adding black edges to the bars
+fig2 = px.bar(
+    popular_brands,
+    x='brand',
+    y='count',
+    color='color',
+    color_discrete_map={'red': 'red', 'blue': 'blue'},
+    # title="أكثر العلامات انتشاراً",
+    # labels={'brand': 'العلامة التجارية', 'count': 'عدد الساعات'}
+)
 fig2.update_traces(marker=dict(line=dict(width=1, color='black')))
-
-# Displaying the chart in Streamlit
 st.plotly_chart(fig2)
-#----------------------------------------------------------------------------------------------
-st.markdown("<br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
-
-st.image("feature.png", use_column_width=True)
 
 
+st.image("feature.png",  use_column_width=True)  
+
+
+# Create a dropdown menu for selecting the chart to display
 selected_brand = st.selectbox("اختر الماركة:", ["All Brands"] + list(df['brand'].unique()))
 
 # Filter the dataframe based on the selected brand
@@ -312,6 +249,7 @@ chart_option = st.selectbox(
         "تحليل الأسعار حسب الموديل",
         "تحليل الأسعار حسب نوع الحركة",
         "ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)",
+        # "تحليل الأسعار حسب مادة الساعة",
         "تحليل الأسعار حسب مادة السوار",
         "متوسط الأسعار حسب الجنس"
     ]
@@ -319,221 +257,311 @@ chart_option = st.selectbox(
 
 # Display the selected chart
 if chart_option == "تحليل الأسعار حسب حالة الساعة":
-    condition_prices = df.groupby('condition')['price_usd'].median().sort_values(ascending=False)
+    if selected_brand != "All Brands":
+        # Filter the data for the selected brand
+        filtered_data = df[df['brand'] == selected_brand].copy()
 
-    # Create two columns: one for markdown and one for the chart
-    col1, col2 = st.columns([1, 2])
+        # Add year_of_production to model for display
+        filtered_data['model_with_year'] = filtered_data['model'] + " (" + filtered_data['year_of_production'].astype(str) + ")"
 
-    with col1:
-        st.markdown("### تحليل الأسعار حسب حالة الساعة:")
+        # Group by 'condition' and 'model_with_year'
+        condition_model_prices = filtered_data.groupby(['condition', 'model_with_year'])['price_usd'].median().reset_index()
 
-    with col2:
-        fig_condition_prices = px.bar(
-            condition_prices,
-            x=condition_prices.index,
-            y=condition_prices.values,
-            labels={'x': 'حالة الساعة', 'y': 'السعر بالدولار'},
-            title='تحليل الأسعار حسب حالة الساعة'
+        # Limit to top 20 models by median price
+        top_models = (
+            condition_model_prices
+            .groupby('model_with_year')['price_usd']
+            .median()
+            .sort_values(ascending=False)
+            .head(20)
+            .index
         )
-        st.plotly_chart(fig_condition_prices)
+        condition_model_prices = condition_model_prices[condition_model_prices['model_with_year'].isin(top_models)]
+
+        # Create a Sunburst chart with 'condition' and 'model_with_year' as hierarchical levels
+        fig = px.sunburst(
+            condition_model_prices,
+            path=['condition', 'model_with_year'],  # Hierarchical levels: Condition > Model (with year)
+            values='price_usd',                     # Size of the segments
+            color='price_usd',                      # Color based on price
+            color_continuous_scale='viridis',
+            title=f"تحليل الأسعار حسب حالة الساعة والموديلات (مع سنة التصنيع) للماركة: {selected_brand}",
+        )
+    else:
+        # Group by 'condition' and 'brand' for all data
+        condition_brand_prices = df.groupby(['condition', 'brand'])['price_usd'].median().reset_index()
+
+        # Create a Sunburst chart with 'condition' and 'brand' as hierarchical levels
+        fig = px.sunburst(
+            condition_brand_prices,
+            path=['condition', 'brand'],  # Hierarchical levels: Condition > Brand
+            values='price_usd',          # Size of the segments
+            color='price_usd',           # Color based on price
+            color_continuous_scale='viridis',
+            title="تحليل الأسعار حسب حالة الساعة والماركة",
+        )
+
+    # Render the Plotly chart in Streamlit
+    st.plotly_chart(fig, use_container_width=True)
+
 
 elif chart_option == "تحليل الأسعار حسب حجم الساعة":
     size_prices = df.groupby('size_mm')['price_usd'].median()
 
     distinct_color_map = {
-        "A. Lange & Söhne": "#e6194b",  # Bright Red
-        "Audemars Piguet": "#3cb44b",  # Bright Green
-        # ... other brands
+    "A. Lange & Söhne": "#e6194b",  # Bright Red
+    "Audemars Piguet": "#3cb44b",  # Bright Green
+    "Breitling": "#ffe119",        # Bright Yellow
+    "Cartier": "#4363d8",          # Bright Blue
+    "Hublot": "#f58231",           # Bright Orange
+    "IWC": "#911eb4",              # Bright Purple
+    "Jaeger-LeCoultre": "#42d4f4", # Cyan
+    "Longines": "#f032e6",         # Magenta
+    "Omega": "#bfef45",            # Lime
+    "Oris": "#fabebe",             # Light Pink
+    "Panerai": "#469990",          # Teal
+    "Patek Philippe": "#e6beff",   # Lavender
+    "Rado": "#9a6324",             # Brown
+    "Richard Mille": "#fffac8",    # Light Yellow
+    "Rolex": "#800000",            # Maroon
+    "Seiko": "#aaffc3",            # Mint Green
+    "Sinn": "#808000",             # Olive
+    "TAG Heuer": "#ffd8b1",        # Peach
+    "Tudor": "#000075",            # Navy
+    "Vacheron Constantin": "#808080", # Gray
+    "Zenith": "#000000"            # Black
     }
 
-    # Create two columns: one for markdown and one for the chart
-    col1, col2 = st.columns([1, 2])
+# Create the scatter plot
+    fig_size_price_bubble = px.scatter(
+    df,
+    x='size_mm',
+    y='price_usd',
+    size='price_usd',
+    color='brand',
+    hover_name='model',
+    color_discrete_map=distinct_color_map,  # Apply the distinct color map
+    )
 
-    with col1:
-        st.markdown("### تحليل الأسعار حسب حجم الساعة:")
+    fig_size_price_bubble.update_layout(
+    #title="الحجم والسعر حسب البراند",
+    xaxis_title="الحجم (mm)",
+    yaxis_title="السعر (دولار أمريكي)",
+    legend_title="البراند",
+    legend=dict(orientation="v", x=1.05, y=1)  # Adjust legend position
+)
 
-    with col2:
-        fig_size_price_bubble = px.scatter(
-            df,
-            x='size_mm',
-            y='price_usd',
-            size='price_usd',
-            color='brand',
-            hover_name='model',
-            color_discrete_map=distinct_color_map,  # Apply the distinct color map
-        )
-
-        fig_size_price_bubble.update_layout(
-            xaxis_title="الحجم (mm)",
-            yaxis_title="السعر (دولار أمريكي)",
-            legend_title="البراند",
-            legend=dict(orientation="v", x=1.05, y=1)  # Adjust legend position
-        )
-
-        st.plotly_chart(fig_size_price_bubble)
+    st.plotly_chart(fig_size_price_bubble)
 
 elif chart_option == "تحليل الأسعار حسب سنوات التصنيع":
     yearly_prices = df.groupby('year_of_production')['price_usd'].median()
-
-    # Create two columns: one for markdown and one for the chart
-    col1, col2 = st.columns([1, 2])
-
-    with col1:
-        st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
-
-    with col2:
-        fig_yearly_prices = px.line(
-            yearly_prices,
-            x=yearly_prices.index,
-            y=yearly_prices.values,
-            labels={'x': 'سنة التصنيع', 'y': 'السعر بالدولار'},
-            title='تحليل الأسعار حسب سنوات التصنيع'
-        )
-        st.plotly_chart(fig_yearly_prices)
+    st.markdown("### تحليل الأسعار حسب سنوات التصنيع:")
+    fig_yearly_prices = px.line(
+        yearly_prices,
+        x=yearly_prices.index,
+        y=yearly_prices.values,
+        labels={'x': 'سنة التصنيع', 'y': 'السعر بالدولار'},
+        title='تحليل الأسعار حسب سنوات التصنيع'
+    )
+    st.plotly_chart(fig_yearly_prices)
 
 elif chart_option == "تحليل الأسعار حسب الموديل":
     model_prices = df.groupby('model')['price_usd'].median().sort_values(ascending=False).head(10)
-
-    # Create two columns: one for markdown and one for the chart
-    col1, col2 = st.columns([1, 2])
-
-    with col1:
-        st.markdown("### تحليل الأسعار حسب الموديل:")
-        st.markdown("الساعات زي ريتشارد ميل تتميز بموادها الفريدة وتصاميمها المبتكرة اللي تجمع بين الخفة والمتانة، عشان كذا أسعارها مرتفعة.")
-        st.markdown("بالذات موديلات مثل RM 055 وRM 035 غالية لأنها مصنوعة من كربون TPT، وتعاونهم مع رياضيين كبار زي نادال يرفع قيمتها أكثر.")
-
-    with col2:
-        fig_model_prices = px.bar(
-            model_prices,
-            x=model_prices.index,
-            y=model_prices.values,
-            labels={'x': 'الموديل', 'y': 'السعر بالدولار'},
-            title='تحليل الأسعار حسب الموديل'
-        )
-        st.plotly_chart(fig_model_prices)
+    st.markdown("### تحليل الأسعار حسب الموديل:")
+    fig_model_prices = px.bar(
+        model_prices,
+        x=model_prices.index,
+        y=model_prices.values,
+        labels={'x': 'الموديل', 'y': 'السعر بالدولار'},
+        title='تحليل الأسعار حسب الموديل'
+    )
+    st.plotly_chart(fig_model_prices)
+    st.markdown("الساعات زي ريتشارد ميل تتميز بموادها الفريدة وتصاميمها المبتكرة اللي تجمع بين الخفة والمتانة، عشان كذا أسعارها مرتفعة.")
+    st.markdown("بالذات موديلات مثل RM 055 وRM 035 غالية لأنها مصنوعة من كربون TPT، وتعاونهم مع رياضيين كبار زي نادال يرفع قيمتها أكثر.")
 
 elif chart_option == "تحليل الأسعار حسب نوع الحركة":
     movement_prices = df.groupby('movement')['price_usd'].median().sort_values(ascending=False)
+    
+    st.markdown("""
+        <style>
+        .custom-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            font-weight: 400; /* Regular weight for better readability */
+            color: #444444; /* Neutral dark gray for both light and dark modes */
+            text-align: justify;
+            line-height: 1.8; /* Comfortable line spacing */
+            margin-bottom: 20px; /* Space below the text */
+        }
+        
+        </style>
+        <div class="custom-text">
+        تلعب حركة الساعة (نوع الميكانيكية التي تديرها) دورًا كبيرًا في تحديد قيمتها. في عالم الساعات الفاخرة، تختلف الأسعار بناءً على نوع الحركة، حيث يعكس ذلك تعقيد التصميم ومستوى الحرفية. يوضح الرسم البياني التالي متوسط أسعار الساعات حسب نوع الحركة:
+        </div>
+        """, unsafe_allow_html=True)
 
-    # Create two columns: one for markdown and one for the chart
-    col1, col2 = st.columns([1, 2])
+    fig_movement_prices = px.bar(
+        movement_prices,
+        x=movement_prices.index,
+        y=movement_prices.values,
+        labels={'x': 'نوع الحركة', 'y': 'السعر بالدولار'},
+        title='تحليل الأسعار حسب نوع الحركة'
+    )
+    fig_movement_prices.update_layout(
+    xaxis_title="<b>نوع الحركة</b>",
+    yaxis_title="<b>السعر بالدولار</b>",
+    title_font=dict(size=18, family="Arial"),
+    xaxis=dict(
+        tickfont=dict(size=12, family="Arial", weight="bold",color="black")
+    ),
+    yaxis=dict(
+        tickfont=dict(size=12, family="Arial", weight="bold")
+    ))
+    st.plotly_chart(fig_movement_prices)
+    st.markdown('من الرسم البياني يوضح لك إن الساعات اللي بحركة يدوية (manual winding) وأوتوماتيكية (automatic) هي الأغلى، لأنها تعكس الحرفية العالية والجودة في التصميم.')
 
-    with col1:
-        st.markdown("### تحليل الأسعار حسب نوع الحركة:")
-        st.markdown('من الرسم البياني يوضح لك إن الساعات اللي بحركة يدوية (manual winding) وأوتوماتيكية (automatic) هي الأغلى، لأنها تعكس الحرفية العالية والجودة في التصميم.')
+ 
 
-
-    with col2:
-        fig_movement_prices = px.bar(
-            movement_prices,
-            x=movement_prices.index,
-            y=movement_prices.values,
-            labels={'x': 'نوع الحركة', 'y': 'السعر بالدولار'},
-            title='تحليل الأسعار حسب نوع الحركة'
-        )
-        st.plotly_chart(fig_movement_prices)
 
 elif chart_option == "ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)":
-    st.markdown("### ترند مواد تصنيع الهياكل حسب العِقد (1900-2023)")
+    st.markdown("""
+        <style>
+        .custom-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            font-weight: 400; /* Regular weight for better readability */
+            color: #444444; /* Neutral dark gray for both light and dark modes */
+            text-align: justify;
+            line-height: 1.8; /* Comfortable line spacing */
+            margin-bottom: 20px; /* Space below the text */
+        }
+        .highlight {
+            color: #6D9DC5; /* Gold color to emphasize certain phrases */
+            font-weight: bold;
+        }
+        </style>
+        <div class="custom-text">
+        يعكس هذا الرسم البياني توزيع عدد الساعات حسب المادة المستخدمة في تصنيع هيكلها عبر العقود 
+        <span class="highlight">(1900-2023)</span>. يساعدنا هذا التحليل في تتبع التغيرات في تفضيلات مواد التصنيع بمرور الزمن 
+        وفهم الاتجاهات السائدة في سوق الساعات الفاخرة.
+        </div>
+        """, unsafe_allow_html=True)
 
-    # Processing data
-    filtered_df = df[(df['year_of_production'] >= 1900) & (df['year_of_production'] <= 2023)]
+    start_year = 1900
+    end_year = 2023
+    filtered_df = df[(df['year_of_production'] >= start_year) & (df['year_of_production'] <= end_year)]
     filtered_df['decade'] = (filtered_df['year_of_production'] // 10) * 10
     case_material_count = filtered_df.groupby(['decade', 'case_material']).size().reset_index(name='count')
-
-    # Create two columns: one for markdown and one for the chart
-    col1, col2 = st.columns([1, 2])
-
-    with col1:
-        st.markdown("#### تحليل المواد على مر العقود:")
-
-    with col2:
-        fig_case_material = px.line(
-            case_material_count,
-            x='decade',
-            y='count',
-            color='case_material',
-            markers=True,
-            labels={'count': 'عدد الساعات بحسب نوع الهيكل', 'decade': 'عقد'}
-        )
-        st.plotly_chart(fig_case_material)
+    fig = px.line(
+        case_material_count,
+        x='decade',
+        y='count',
+        color='case_material',
+        markers=True,
+        labels={'count': 'عدد الساعات بحسب نوع الهيكل', 'decade': 'عقد'}
+    )
+    st.plotly_chart(fig)
 
 elif chart_option == "تحليل الأسعار حسب مادة السوار":
     bracelet_material_prices = df.groupby('bracelet_material')['price_usd'].median().sort_values(ascending=False)
+    st.markdown("### تحليل الأسعار حسب مادة السوار:")
+    fig_bracelet_material_prices = px.bar(
+        bracelet_material_prices,
+        x=bracelet_material_prices.index,
+        y=bracelet_material_prices.values,
+        labels={'x': 'مادة السوار', 'y': 'السعر بالدولار'},
+        #title='تحليل الأسعار حسب مادة السوار'
+    )
+    st.plotly_chart(fig_bracelet_material_prices)
+    st.write("""
+    بناءً على البيانات، المواد زي **البلاتين** والذهب (الوردي والأبيض) تستهدف اللي يدورون الفخامة والقيمة العالية، 
+    بينما مواد زي **الستانلس ستيل** أو السيراميك تناسب الناس اللي يبغون ساعات عملية وقوية للاستخدام اليومي.
+    """)
 
-    # Create two columns: one for markdown and one for the chart
-    col1, col2 = st.columns([1, 2])
-
-    with col1:
-        st.markdown("### تحليل الأسعار حسب مادة السوار:")
-
-    with col2:
-        fig_bracelet_material_prices = px.bar(
-            bracelet_material_prices,
-            x=bracelet_material_prices.index,
-            y=bracelet_material_prices.values,
-            labels={'x': 'مادة السوار', 'y': 'السعر بالدولار'},
-            title='تحليل الأسعار حسب مادة السوار'
-        )
-        st.plotly_chart(fig_bracelet_material_prices)
+    st.write("""
+    المثير للاهتمام إن مواد نادرة زي **جلد القرش** و**جلد الثعبان**، وعلى الرغم من التوقعات بأنها بتكون غالية، 
+    إلا إنها طلعت بأسعار أقل بكثير، مما يعكس إنها موجهة لمحبي التميز بأسعار معقولة بدل ما تكون رمز فخامة بحت.
+    """)
 
 elif chart_option == "متوسط الأسعار حسب الجنس":
-    gender_prices = df.groupby('sex')['price_usd'].median().reset_index()
-    gender_prices.rename(columns={'price_usd': 'median_price'}, inplace=True)
-    
-    gender_counts = df['sex'].value_counts().reset_index()
-    gender_counts.columns = ['sex', 'count']
+    gender_stats = df.groupby('sex').agg({'price_usd': 'median', 'model': 'count'}).reset_index()
+    gender_stats.columns = ['sex', 'median_price', 'count']
 
-    gender_data = pd.merge(gender_counts, gender_prices, on='sex', how='left')
-    gender_data['percentage'] = (gender_data['count'] / gender_data['count'].sum()) * 100
+    # Create the dual-axis bar and line chart
+    fig_dual_axis = make_subplots(specs=[[{"secondary_y": True}]])
 
-    # Create two columns: one for markdown and one for the chart
-    col1, col2 = st.columns([1, 2])
+    # Add bar chart for the number of watches
+    fig_dual_axis.add_trace(
+        go.Bar(x=gender_stats['sex'], y=gender_stats['count'], name='عدد الساعات', marker_color='blue'),
+        secondary_y=False,
+    )
 
-    with col1:
-        st.markdown("### توزيع الساعات حسب الجنس ومتوسط الأسعار:")
+    # Add line chart for the median price
+    fig_dual_axis.add_trace(
+        go.Scatter(x=gender_stats['sex'], y=gender_stats['median_price'], name='متوسط السعر', marker_color='red', mode='lines+markers'),
+        secondary_y=True,
+    )
 
-    with col2:
-        fig = px.pie(
-            gender_data,
-            names='sex',
-            values='count',
-            title="توزيع الساعات حسب الجنس ومتوسط الأسعار",
-            hover_data={'median_price': True, 'percentage': ':.2f'},
-            labels={'sex': 'الجنس', 'count': 'عدد الساعات'}
-        )
+    # Update layout
+    fig_dual_axis.update_layout(
+        title_text="عدد الساعات ومتوسط السعر حسب الجنس",
+        xaxis_title="الجنس",
+        yaxis_title="عدد الساعات",
+        yaxis2_title="متوسط السعر بالدولار",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
 
-        # Customize the hover template
-        fig.update_traces(
-            hovertemplate="<b>%{label}</b><br>عدد الساعات: %{value}<br>متوسط السعر: %{customdata[0]:,.0f}$<br>النسبة: %{customdata[1]:.2f}%"
-        )
-
-        st.plotly_chart(fig)
+    # Render the dual-axis chart in Streamlit
+    st.plotly_chart(fig_dual_axis)
+    st.write('بناءً على البيانات، يظهر إن عدد الساعات الرجالية أكبر من النسائية، ومتوسط أسعارها أعلى. هذي الأرقام تعكس طبيعة السوق بدون أي تحيز، لكنها توضح الفروقات في المعروض والأسعار بين الفئتين.')
 
 
-#---------------------------------------------------------------------------------------------------------------
-
-st.markdown("<br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
-
-# Conclusion and Recommendations
-# TODO - Rewrite the recommendations
-st.markdown(
-    """
-    <h1 style="font-size: 40px; text-align: center; color: #333;">توصيات أخيرة:</h1>
-    """,
-    unsafe_allow_html=True
-)
+# Additional insights section
+st.subheader("نقاط إضافية مهمة")
 st.markdown("""
-بعد ما استعرضنا تأثير الخصائص المختلفة على سعر الساعات، نحب نشارك معك بعض التوصيات التي يمكن أن تساعدك في اتخاذ القرار الأفضل للاستثمار:
+- متوسط الأسعار يختلف بين الساعات الرجالية والنسائية بشكل ملحوظ.
+- مادة السوار (جلد، معدن، سيراميك) ممكن تؤثر على السعر.
+- حالة الساعة (جديدة، مستعملة) لها تأثير مباشر على قيمتها.
 """)
-st.markdown("""
-1. **اختيار الماركات الشهيرة:**
 
-2. **الحجم مهم:** 
 
-3. **سنة التصنيع:** 
 
-4. **الموديلات النادرة:** 
-            
-5. **نوع الحركة والمادة:** 
-""")
+
+
+
+
+
+
+########## OLD CODE ##########
+
+    ## Case material prices analysis It was with the same code as the bracelet material prices analysis
+    # selected_year = st.selectbox("اختر السنة لتحليل الأسعار حسب مادة الساعة:", df['year_of_production'].unique())
+    # year_filtered_df = df[df['year_of_production'] == selected_year]
+    # case_material_prices = year_filtered_df.groupby('case_material')['price_usd'].median().sort_values(ascending=False)
+    # st.markdown("### تحليل الأسعار حسب مادة الساعة:")
+    # st.bar_chart(case_material_prices)
+
+# Interactive filters for watch specifications
+# st.header("اختر مواصفات الساعة:")
+# brand = st.selectbox("البراند", df['brand'].unique())
+# movement = st.selectbox("نوع الحركة", df[df['brand'] == brand]['movement'].unique())
+# case_material = st.selectbox("مادة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement)]['case_material'].unique())
+# bracelet_material = st.selectbox("مادة السوار", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material)]['bracelet_material'].unique())
+# year_of_production = st.selectbox("سنة التصنيع", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material)]['year_of_production'].unique())
+# condition = st.selectbox("حالة الساعة", df[(df['brand'] == brand) & (df['movement'] == movement) & (df['case_material'] == case_material) & (df['bracelet_material'] == bracelet_material) & (df['year_of_production'] == year_of_production)]['condition'].unique())
+
+# # Filter data based on selected criteria
+# filtered_data = df[
+#     (df['brand'] == brand) &
+#     (df['movement'] == movement) &
+#     (df['case_material'] == case_material) &
+#     (df['bracelet_material'] == bracelet_material) &
+#     (df['year_of_production'] == year_of_production) &
+#     (df['condition'] == condition)
+# ]
+
+# # Display available watches based on the selected filters
+# st.subheader("الساعات المتوفرة:")
+# filtered_data['price_range'] = filtered_data.groupby('model')['price_usd'].transform(lambda x: f"${x.min()} - ${x.max()}")
+# filtered_data = filtered_data.drop_duplicates(subset=['model'])
+# st.write(filtered_data[['model', 'price_range']])  # Display filtered watch details
