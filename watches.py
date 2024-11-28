@@ -233,7 +233,17 @@ fig2.update_traces(marker=dict(line=dict(width=1, color='black')))
 st.plotly_chart(fig2)
 
 
-st.image("feature.png",  use_column_width=True)  
+st.markdown("<br><br>", unsafe_allow_html=True)
+
+col1, col2 = st.columns([1, 2])
+
+with col1:
+    st.image("feature.png", use_column_width=True)
+
+with col2:
+    st.markdown("""
+    ،بعد دراسة البيانات وخصائص الساعات، تبين أن قيمة الساعة تختلف بناءً على العوامل التالية
+    """)
 
 
 # Create a dropdown menu for selecting the chart to display
