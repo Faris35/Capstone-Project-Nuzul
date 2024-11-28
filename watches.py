@@ -147,7 +147,7 @@ with col3:
     """, unsafe_allow_html=True)
 
 
-st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 
 st.markdown("#### هل سوق الساعات في نمو مستمر؟")
