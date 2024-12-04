@@ -564,10 +564,6 @@ st.write("""
 هالنقاط بتساعدك تختار الساعة اللي تناسبك سواء كشكل أو كاستثمار ذكي.
 """)
 
-import streamlit as st
-import pandas as pd
-import requests
-
 # Load the dataset
 df = pd.read_csv('Final_version4_all_watches.csv')  # Ensure the file exists in the correct location
 
@@ -586,70 +582,67 @@ filtered_years = filtered_models[filtered_models['model'] == selected_model]
 # Dropdown for Year Selection
 selected_year = st.selectbox("اختر سنة التصنيع:", sorted(filtered_years['year_of_production'].unique()))
 
-# Extract the reference for the selected row
-selected_row = filtered_years[
-    (filtered_years['model'] == selected_model) & 
-    (filtered_years['year_of_production'] == selected_year)
-]
+if st.button("عرض معلومات الساعة"):
+    # Extract the reference for the selected row
+    selected_row = filtered_years[
+        (filtered_years['model'] == selected_model) & 
+        (filtered_years['year_of_production'] == selected_year)
+    ]
 
-# Check if the reference exists
-if not selected_row.empty and 'ref' in selected_row.columns:
-    reference = selected_row.iloc[0]['ref']
-    st.write(f"تم استخراج الرقم المرجعي: {reference}")
+    # Check if the reference exists
+    if not selected_row.empty and 'ref' in selected_row.columns:
+        reference = selected_row.iloc[0]['ref']
+        st.write(f"تم استخراج الرقم المرجعي: {reference}")
 
-    # Use the extracted reference as input for the API
-    api_key = "Q54K647We9a6QAitZA9Wn5rn9l3I2P9i3O53VuZ8"
-    search_url = f'https://api.watchcharts.com/v3/search/watch?brand_name={selected_brand}&reference={reference}'
+        # Use the extracted reference as input for the API
+        api_key = "Q54K647We9a6QAitZA9Wn5rn9l3I2P9i3O53VuZ8"
+        search_url = f'https://api.watchcharts.com/v3/search/watch?brand_name={selected_brand}&reference={reference}'
 
-    headers = {
-        "x-api-key": api_key,
-        "Content-Type": "application/json",
-    }
+        headers = {
+            "x-api-key": api_key,
+            "Content-Type": "application/json",
+        }
 
-    response = requests.get(search_url, headers=headers)
+        response = requests.get(search_url, headers=headers)
 
-    # Display the API response
-    if response.status_code == 200:
-        data = response.json()
-        if data.get('success') and 'results' in data:
-            results = data['results']
-            if len(results) > 0:
-                uuid = results[0].get('uuid', None)
-                st.success(f"تم استخراج UUID: {uuid}")
-                st.write("تفاصيل البحث:")
-                st.json(data)
+        # Display the API response
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'results' in data:
+                results = data['results']
+                if len(results) > 0:
+                    uuid = results[0].get('uuid', None)
+                    st.success(f"تم استخراج UUID: {uuid}")
+                    
+                    # Step 2: Use the UUID to make the second request
+                    info_url = f'https://api.watchcharts.com/v3/watch/info?uuid={uuid}'
+                    info_response = requests.get(info_url, headers=headers)
 
-                # Step 2: Use the UUID to make the second request
-                info_url = f'https://api.watchcharts.com/v3/watch/info?uuid={uuid}'
-                info_response = requests.get(info_url, headers=headers)
+                    if info_response.status_code == 200:
+                        info_data = info_response.json()
 
-                if info_response.status_code == 200:
-                    info_data = info_response.json()
+                        # Extract data with proper handling for missing values
+                        market_price = info_data.get('market_price')
+                        dealer_price = info_data.get('dealer_price')
+                        market_price_formatted = f"${market_price:,.2f}" if market_price else "N/A"
+                        dealer_price_formatted = f"${dealer_price:,.2f}" if dealer_price else "N/A"
 
-                    # Extract data with proper handling for missing values
-                    market_price = info_data.get('market_price')
-                    dealer_price = info_data.get('dealer_price')
-                    market_price_formatted = f"${market_price:,.2f}" if market_price else "N/A"
-                    dealer_price_formatted = f"${dealer_price:,.2f}" if dealer_price else "N/A"
-
-                    st.subheader("تفاصيل الساعة")
-                    st.write("فيما يلي المعلومات التفصيلية عن الساعة:")
-                    st.markdown(f"""
-                        - **العلامة التجارية**: {info_data.get('brand', 'N/A')}
-                        - **المجموعة**: {info_data.get('collection', 'N/A')}
-                        - **الموديل**: {info_data.get('model', 'N/A')}
-                        - **السعر في السوق**: {market_price_formatted}
-                        - **سعر التاجر**: {dealer_price_formatted}
-                        - **التقلب**: {info_data.get('volatility', 'N/A') * 100 if info_data.get('volatility') else 'N/A'}%
-                        - **آخر تحديث**: {info_data.get('updated', 'N/A')}
-                    """)
+                        st.subheader("تفاصيل الساعة")
+                        st.write("فيما يلي المعلومات التفصيلية عن الساعة:")
+                        st.markdown(f"""
+                            - **العلامة التجارية**: {info_data.get('brand', 'N/A')}
+                            - **المجموعة**: {info_data.get('collection', 'N/A')}
+                            - **الموديل**: {info_data.get('model', 'N/A')}
+                            - **السعر في السوق**: {market_price_formatted}
+                            - **سعر التاجر**: {dealer_price_formatted}
+                            - **التقلب**: {info_data.get('volatility', 'N/A') * 100 if info_data.get('volatility') else 'N/A'}%
+                            - **آخر تحديث**: {info_data.get('updated', 'N/A')}
+                        """)
+                    else:
+                        st.error(f"خطأ أثناء جلب تفاصيل الساعة: {info_response.status_code}")
                 else:
-                    st.error(f"خطأ أثناء جلب تفاصيل الساعة: {info_response.status_code}")
+                    st.warning("لم يتم العثور على نتائج.")
             else:
-                st.warning("لم يتم العثور على نتائج.")
+                st.error("لم يتم استرجاع البيانات بشكل صحيح.")
         else:
-            st.error("لم يتم استرجاع البيانات بشكل صحيح.")
-    else:
-        st.error(f"خطأ في طلب API: {response.status_code}")
-else:
-    st.warning("لم يتم العثور على الرقم المرجعي لهذه الخيارات أو العمود 'reference' مفقود.")
+            st.error(f"خطأ في طلب API: {response.status_code}")
